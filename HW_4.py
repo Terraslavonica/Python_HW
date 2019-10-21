@@ -45,7 +45,7 @@ list_sum = []
 q = len(list1)
 for i in range(q):
     sumi = list1[i]+list2[i]
-    list_sum += [sumi]
+    list_sum.append(sumi)
 print(list_sum)
 
 
@@ -73,17 +73,14 @@ print(elements)
 
 print(elements[::-1]) ##1
 
-num = len(elements) ##2
-i = int(num)-1
+i = len(elements) -1 ##2
 elem_inv = []
 while i >= 0:
     elem_inv += [elements[i]]
     i -= 1
 print(elem_inv)
 
-print([elements[-1], elements[-2], elements[-3]]) ##3
-
-elements.reverse() ##4
+elements.reverse() ##3
 print(elements)
 
 
@@ -93,6 +90,4 @@ summa = 0
 for elem in interesting_numbers:
     if elem % 2 == 0:
         summa += elem
-    else:
-        continue
 print(summa)
