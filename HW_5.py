@@ -140,4 +140,16 @@ print(s_inv)
 # Напишите реверскомплементатор (чем больше способов, тем лучше), на вход подаётся строка ДНК,
 # нужно чтобы выводился реверскомплемент заглавными буквами
 DNA = 'AGCATTCGAGCATCCTAGCGG'
-DNA.translate(str.maketrans('ATGC', 'UACG'))
+DNA.translate(str.maketrans('ATGC', 'TACG'))[::-1] ##1
+
+DNA_revcomp = ''    ##2
+for i in DNA:
+    if i == 'A':
+        DNA_revcomp += 'T'
+    elif i == 'C':
+        DNA_revcomp += 'G'
+    elif i == 'G':
+        DNA_revcomp += 'C'
+    else:
+        DNA_revcomp += 'A'
+print(DNA_revcomp[::-1])
