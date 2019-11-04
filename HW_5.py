@@ -21,8 +21,9 @@ le_troisieme
 s = {1, 2, 3, 4, 5}
 s.symmetric_difference({4,5,6,7,8,0, True}) # симметричное вычитание
 s
-2 in s # проверку на вхождение одного сэта в другой
-{2, 3}.issubset(s)
+2 in s # проверку на вхождение одного сэта в другой #True
+{2, 3}.issubset(s) #True
+{0, 2, 3}.issubset(s) #False
 
 # Task 2.
 ## Создайте пустой словарь,
@@ -45,16 +46,21 @@ slovar['red'] += ' and vermelho'
 slovar['five'] *= 2
 slovar
 
+for key in slovar.keys():
+    if key != 'green':
+        slovar[key] = str(slovar.get(key)).upper()
+slovar
+
 # Task 3.
 ## Проитерируйтесь по заданному вами словарю и выведите его ключи и элементы (какой способ кажется вам лучшим?)
 for k in slovar:
-    print (k, '-', slovar[k]) # мой любимый способ, удовлетворяет принцыпу бритвы Оккама
+    print(k, '-', slovar[k]) # мой любимый способ, удовлетворяет принцыпу бритвы Оккама
 
 for k in slovar.keys():
-    print (k, '-', slovar[k])
+    print(k, '-', slovar[k])
 
 for k,v in slovar.items():
-    print (k, '-', v)
+    print(k, '-', v)
 
 # Task 4.
 ## Создайте программу, принимающую на вход строку и выводящую, начинается ли строка с заглавной буквы
@@ -74,7 +80,7 @@ my_str.lower()
 my_str.title()
 
 # Task 5.
-# Напишите программу, принимающую на вход строку и выводящую с чего эта строка начинается (цифра, буква, пробел) (5 баллов)
+# Напишите программу, принимающую на вход строку и выводящую с чего эта строка начинается (цифра, буква, пробел)
 my_str = "There's a fire starting in my heart. Reaching a fever pitch and it's bringing me out the dark!!!"
 if my_str[1].isalpha():
     print('Start by letter')
@@ -84,7 +90,7 @@ elif my_str[1].isspace():
     print('Start by space')
 
 # Task 6.
-# Сконвертируйте список, кортеж, сэт и строку друг в друга всеми возможными способами (строка -> лист, строка -> кортеж, ...) (6 баллов)
+# Сконвертируйте список, кортеж, сэт и строку друг в друга всеми возможными способами (строка -> лист, строка -> кортеж, ...)
 stroka = 'lavieestbelle' ## строка -> сэт (множество)
 set(stroka)
 
@@ -112,14 +118,14 @@ str(korteg)
 korteg = ('un', 'deux', 'trois', 'quatre', 'cinq') ## кореж -> сэт (множество)
 set(korteg) ## не умеет считать по-французски даже до пяти, выдает числа в самом дурацком порядке :Р
 
-mnogestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> список
-list(mnogestvo)
+mnojestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> список
+list(mnojestvo)
 
-mnogestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> строка
-str(mnogestvo)
+mnojestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> строка
+str(mnojestvo)
 
-mnogestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> кортеж
-tuple(mnogestvo)
+mnojestvo = {'un', 'deux', 'trois', 'quatre', 'cinq', 'Un', 'Deux', 'Trois', 'Quatre', 'Cinq'} ## сэт -> кортеж
+tuple(mnojestvo)
 
 
 # Task 7.
