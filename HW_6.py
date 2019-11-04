@@ -1,30 +1,34 @@
-## Task 1.
-# *Сделайте функцию, принимающую лист и возвращающую выпрямленный лист (исходный не должен был измениться):
-def flat(List):
-    Flat_list = []
-    for i in range(0, len(List)):
-        if type(List[i]) is int:
-            Flat_list.append(List[i])
-        else:
-            for j in range(0, len(List[i])):
-                Flat_list.append(List[i][j])
+## Task 1. *Сделайте функцию, принимающую лист и возвращающую выпрямленный лист (исходный не должен был измениться):
+def flatten(List):
+
+    def flat(List):
+        Flat_list = []
+        for i in range(0, len(List)):
+            if type(List[i]) is int:
+                Flat_list.append(List[i])
+            else:
+                for j in range(0, len(List[i])):
+                    Flat_list.append(List[i][j])
+        return Flat_list
+
+    Flat_list = flat(List)
+    for k in range(0, len(Flat_list)):
+        if type(Flat_list[k]) is list:
+            a = True
+            while a:
+                Flat_list = flat(Flat_list)
+                for k in range(0, len(Flat_list)):
+                    if type(Flat_list[k]) is list:
+                        a = True
+                    else:
+                        a = False
     return Flat_list
 
-def flatten(List):
-    Flat_list = []
-    for i in range(0, len(List)):
-        if type(List[i]) is list:
-            flat(Flat_list)
-        else:
-            return Flat_list
 
-
-flatten([1, [1, 2], 3, [[4, 5, [6]]]]) ## Пока не работает, но за неделю я добью
-[1, 1, 2, 3, 4, 5, 6]
-(15 баллов)
-
-List = [1, [1, 2], 3, [[4, 5, [6]]]]
-
+flatten([[1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
+## [1, 1, 2, 3, 4, 5, 6]
+flatten([[[[[[[[[[[[[[[[[[[[['privet']]]]]]]]]]]]]]]]]]]]])
+## ['privet']
 
 ## Task 2. Напишите функцию, принимающую число и вычисляющую число Фибоначчи с номером поданного числа
 def fibo(n):
@@ -37,6 +41,7 @@ fibo(1)
 fibo(2)
 fibo(7)
 fibo(8)
+fibo(100)
 
 
 ## В данных заданиях нельзя пользоваться функциями len, max, reversed, но можно переиспользовать написанные вами функции
@@ -67,7 +72,7 @@ def reverse(spisok):
     rev_sp = []
     i = schetchik(spisok) - 1
     while i >= 0:
-        rev_sp += [spisok[i]]
+        rev_sp.append(spisok[i])
         i -= 1
     return rev_sp
 
@@ -84,7 +89,7 @@ def mean(spisok):
     avg = sumi/n
     return avg
 
-mean([100, 2, 3, 45, -2, 4, 1000000, - 6000])
+mean([100, 2, 3, 45, -2, 4, 1000000, - 6000, -1999])
 
 
 ## Task 6. Функцию, находящую самый частый элемент в списке, если их несколько, то все
