@@ -4,11 +4,11 @@ def flatten(List):
     def flat(List):
         Flat_list = []
         for i in range(0, len(List)):
-            if type(List[i]) is int:
-                Flat_list.append(List[i])
-            else:
+            if type(List[i]) is list:
                 for j in range(0, len(List[i])):
                     Flat_list.append(List[i][j])
+            else:
+                Flat_list.append(List[i])
         return Flat_list
 
     Flat_list = flat(List)
@@ -29,12 +29,16 @@ flatten([[1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
 ## [1, 1, 2, 3, 4, 5, 6]
 flatten([[[[[[[[[[[[[[[[[[[[['privet']]]]]]]]]]]]]]]]]]]]])
 ## ['privet']
+flatten([[[0.5, True], 1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
+L = flat([[[0.5, True], 1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
+L = flat(L)
+len([0.5, True])
 
 ## Task 2. Напишите функцию, принимающую число и вычисляющую число Фибоначчи с номером поданного числа
 def fibo(n):
     a = [1, 1]
     for i in range(0, n):
-    a.append(a[i] + a[i+1])
+        a.append(a[i] + a[i+1])
     return a[n-1]
 
 fibo(1)
@@ -102,7 +106,7 @@ def moda(spisok):
     moda = []
     for key, val in dict.items():
         if val == max_numb:
-        moda.append(key)
+            moda.append(key)
     return tuple(moda) ## обязательно выдавать кортэж как в примере? Чем не подходит просто список?
 
 moda([100, 3, 100, 2, 45, 45, 45, 3, 45, 3, 3, -2, 4])
@@ -112,4 +116,3 @@ moda([1, 2, 3, 4, 5, 6, 7, 8, 9])
 ## Task 7. Функцию, берущую указанный элемент из коллекции
 def get(collection, elem_pos):
     return collection[elem_pos]
-# ну эта функция выдает указанный элемент из коллекции. Наверное, я не поняла, в чем понт заданяи на 10 баллов?
