@@ -4,7 +4,7 @@ def flatten(List):
     def flat(List):
         Flat_list = []
         for i in range(0, len(List)):
-            if type(List[i]) is list:
+            if type(List[i]) is list: ## исходя из задания внутри листа ведь могут быть тоже только листы? если нет, то нужно еще докручивать
                 for j in range(0, len(List[i])):
                     Flat_list.append(List[i][j])
             else:
@@ -25,14 +25,12 @@ def flatten(List):
     return Flat_list
 
 
-flatten([[1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
+print(flatten([[1, [[1], 2], 3, [[4, 5, [[[6]]]]]]]))
 ## [1, 1, 2, 3, 4, 5, 6]
-flatten([[[[[[[[[[[[[[[[[[[[['privet']]]]]]]]]]]]]]]]]]]]])
+print(flatten([[[[[[[[[[[[[[[[[[[[['privet']]]]]]]]]]]]]]]]]]]]]))
 ## ['privet']
-flatten([[[0.5, True], 1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
-L = flat([[[0.5, True], 1, [[1], 2], 3, [[4, 5, [[[6]]]]]]])
-L = flat(L)
-len([0.5, True])
+print(flatten([[[0.5, True], 1, [[1], 2], 3, [[4, 5, [[[6]]]]]]]))
+## [0.5, True, 1, 1, 2, 3, 4, 5, 6]
 
 ## Task 2. Напишите функцию, принимающую число и вычисляющую число Фибоначчи с номером поданного числа
 def fibo(n):
@@ -90,8 +88,8 @@ def mean(spisok):
     while i >= 0:
         sumi += spisok[i]
         i -= 1
-    avg = sumi/n
-    return avg
+    my_avg = sumi/n
+    return my_avg
 
 mean([100, 2, 3, 45, -2, 4, 1000000, - 6000, -1999])
 
