@@ -67,26 +67,26 @@ for k,v in slovar.items():
 my_str = "There's a fire starting in my heart. Reaching a fever pitch and it's bringing me out the dark!!!"
 my_str[0].isupper()
 # число букв в строке
-len(my_str)
+print(len(my_str))
 # заканчивается ли она на '!!'
-my_str[-2:] == "!!"
+my_str.endswith('!!')
 # число встречаний строки 'fire'
-my_str.count('fire')
+print(my_str.count('fire'))
 # эту же строку, где все буквы большие
-my_str.upper()
+print(my_str.upper())
 # маленькие
-my_str.lower()
+print(my_str.lower())
 # все слова начинаются с большой буквы
-my_str.title()
+print(my_str.title())
 
 # Task 5.
 # Напишите программу, принимающую на вход строку и выводящую с чего эта строка начинается (цифра, буква, пробел)
 my_str = "There's a fire starting in my heart. Reaching a fever pitch and it's bringing me out the dark!!!"
-if my_str[1].isalpha():
+if my_str[0].isalpha():
     print('Start by letter')
-elif my_str[1].isdigit():
-    print('Statr by digit')
-elif my_str[1].isspace():
+elif my_str[0].isdigit():
+    print('Start by digit')
+elif my_str[0].isspace():
     print('Start by space')
 
 # Task 6.
