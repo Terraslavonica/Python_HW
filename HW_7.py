@@ -128,7 +128,7 @@ print(matrix)
 # возвращает индекс с этим элементом... Што, простите? Имеется в виду "возвращает индекс этого элемента" или "возвращает элемент и его индекс"
 def lin_search(elem, s):
     """
-    Linear search functin
+    Linear search function
     :param elem: float - the element that we look for
     :param s: list - the list in which we look for the element
     :return: index of the element
@@ -144,3 +144,29 @@ print(lin_search(6.1, s))
 
 ## Task 5. *Имплементируйте бинарный поиск (принимает на вход элемент и отсортированный список,
 # возвращает индекс с этим элементом) (15 баллов)
+def bin_search(elem, s):
+    """
+    Binary search function
+    :param elem: float - the element that we look for
+    :param s: list - sorted list in which we look for the element
+    :return: index of the element
+    """
+    first = 0
+    last = len(s)-1
+    found = False
+
+    while first<=last and not found:
+        pos = 0
+        midpoint = (first + last)//2
+        if s[midpoint] == elem:
+            pos = midpoint
+            found = True
+        else:
+            if elem < s[midpoint]:
+                last = midpoint-1
+            else:
+                first = midpoint+1
+    return (pos)
+
+s = [1, 3, 4, 5, 6, 7, 8, 90, 150.4, 200, 1000]
+print(lin_search(150.4, s))
