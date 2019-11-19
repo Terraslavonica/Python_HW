@@ -129,7 +129,7 @@ print(matrix)
 def lin_search(elem, s):
     """
     Linear search function
-    :param elem: float - the element that we look for
+    :param elem: float (or int) - the element that we look for
     :param s: list - the list in which we look for the element
     :return: index of the element
     """
