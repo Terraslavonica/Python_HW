@@ -2,7 +2,7 @@
 def flatten(List):
     """
     Function which make the List flat
-    :param List: your list
+    :param List: list - your list
     :return: flat List
     """
     if List == []:
@@ -24,7 +24,7 @@ print(flatten([1, [1, 2], [[[[3]]]], [[4, 5, [6.5, True]]]]))
 def fibo(n):
     """
     Function that compute the nth Fibonacci number
-    :param n: number
+    :param n: int - number
     :return: nth Fibonacci number
     """
     a = [1, 1]
@@ -41,7 +41,7 @@ print(fibo(100)) # Работает быстро
 def fibo2(n):
     """
     Function that compute the nth Fibonacci number
-    :param n: number
+    :param n: int - number
     :return: nth Fibonacci number
     """
     if n == 0:
@@ -60,7 +60,7 @@ print(fibo2(100)) # Этот вариант функции чудовищно м
 def schetchik(spisok):
     """
     Calculate the number of elements in the list
-    :param spisok: your list
+    :param spisok: list - your list
     :return: the lenght of your list
     """
     i = 0
@@ -76,7 +76,7 @@ print(schetchik([100, 2, 3, 45, -2, 4]))
 def maximum(spisok):
     """
     Find maximal element in the list
-    :param spisok: your list
+    :param spisok: list - your list
     :return: maximal element in the list
     """
     maxi = spisok[0]
@@ -92,7 +92,7 @@ print(maximum([100, 2, 3, 45, -2, 4]))
 def reverse(spisok):
     """
     Give the reversed list
-    :param spisok: your list
+    :param spisok: list - your list
     :return: reversed list
     """
     rev_sp = []
@@ -108,7 +108,7 @@ print(reverse([100, 2, 3, 45, -2, 4]))
 def mean(spisok):
     """
     Compute the average of the elements in your list
-    :param spisok: your list
+    :param spisok: list - your list
     :return: average value of all elements in the list
     """
     n = schetchik(spisok)
@@ -127,7 +127,7 @@ print(mean([100, 2, 3, 45, -2, 4, 1000000, - 6000, -1999]))
 def moda(spisok):
     """
     Find the most frequent element in your list or all of them
-    :param spisok: your list
+    :param spisok: list - your list
     :return: the most frequent element in your list or all of them
     """
     dict = {}
@@ -139,7 +139,7 @@ def moda(spisok):
     for key, val in dict.items():
         if val == max_numb:
             moda.append(key)
-    return tuple(moda) ## обязательно выдавать кортэж как в примере? Чем не подходит просто список?
+    return tuple(moda)
 
 print(moda([100, 3, 100, 2, 45, 45, 45, 3, 45, 3, 3, -2, 4]))
 print(moda([1, 2, 3, 4, 5, 6, 7, 8, 9]))
@@ -149,8 +149,21 @@ print(moda([1, 2, 3, 4, 5, 6, 7, 8, 9]))
 def get(collection, elem_pos):
     """
     Return the element of your collection with position elem_pos
-    :param collection: your collection
+    :param collection: dict, str, list, tuple - your collection
     :param elem_pos: the position of the element that you need to return (starts at 0)
+                     (for str, list, tuple) or key for the dict
     :return: Return the element with position elem_pos
     """
     return collection[elem_pos]
+
+s = (1, 2, 3, 4)
+print(get(s, 2))
+
+t = [1, 2, 3, 4]
+print(get(t, 1))
+
+st = "sdhfgsufhlk"
+print(get(st, 7))
+
+dict = {1:"one", 2:"two", 3:"three"}
+print(get(dict, 1))
