@@ -27,12 +27,13 @@ def fibo(n):
     :param n: int - number
     :return: nth Fibonacci number
     """
-    a = [1, 1]
+    a = [0, 1]
     for i in range(0, n):
         a.append(a[i] + a[i+1])
     return a[n-1]
 
 print(fibo(1))
+print(fibo(0))
 print(fibo(2))
 print(fibo(7))
 print(fibo(8))
@@ -51,6 +52,7 @@ def fibo2(n):
     else:
         return fibo2(n-1) + fibo2(n-2)
 
+print(fibo2(0))
 print(fibo2(1))
 print(fibo2(8))
 print(fibo2(100)) # Этот вариант функции чудовищно медленно работает! Это он так и не посчитал, пришлось убить
@@ -130,13 +132,13 @@ def moda(spisok):
     :param spisok: list - your list
     :return: the most frequent element in your list or all of them
     """
-    dict = {}
+    diction = {}
     for element in spisok:
-        dict[element] = dict.get(element, 0) + 1
-    numb = list(dict.values())
+        diction[element] = diction.get(element, 0) + 1
+    numb = list(diction.values())
     max_numb = maximum(numb)
     moda = []
-    for key, val in dict.items():
+    for key, val in diction.items():
         if val == max_numb:
             moda.append(key)
     return tuple(moda)
