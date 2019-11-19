@@ -167,5 +167,5 @@ print(get(t, 1))
 st = "sdhfgsufhlk"
 print(get(st, 7))
 
-dict = {1:"one", 2:"two", 3:"three"}
-print(get(dict, 1))
+diction = {1:"one", 2:"two", 3:"three"}
+print(get(diction, 1))
