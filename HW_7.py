@@ -107,17 +107,12 @@ print(au_carre)
 # суммы 2-ух чисел, взятых из последовательностей от 0 до 3 и от 5 до 8
 somme_de_deux = [x+y for y in range(5, 9) for x in range(0, 4)]
 print(somme_de_deux)
-# [5, 6, 7, 8, 6, 7, 8, 9, 7, 8, 9, 10, 8, 9, 10, 11] ## Это ведь не то, что нужно? Нужно [5, 7, 9, 11] ??
-
-# Тогда так
-x = range(5, 9)
-y = range(0, 4)
-somme_de_deux = [x + y for x, y in zip(x, y)]
-print(somme_de_deux)
+# [5, 6, 7, 8, 6, 7, 8, 9, 7, 8, 9, 10, 8, 9, 10, 11]
 
 # строки, представляющие переходы из одних нуклеотидов в другие 'A->T', 'A->C', 'A->G', 'T->A', ...
 v = ["A", "T", "G", "C"]
-my_str = [print(i + '->'+ j) for i in v for j in v if i!=j]
+my_str = [i + '->'+ j for i in v for j in v if i!=j]
+print(my_str)
 
 # вложенные списки, представляющие матрицу 3 на 3, заполненную от 0 до 9
 matrix = [[i+j for i in range(1, 4)] for j in range(0, 7, 3)]
@@ -125,7 +120,6 @@ print(matrix)
 
 
 ## Task 4. Имплементируйте линейный поиск (принимает на вход элемент и список, возвращает индекс с этим элементом) (10 баллов)
-# возвращает индекс с этим элементом... Што, простите? Имеется в виду "возвращает индекс этого элемента" или "возвращает элемент и его индекс"
 def lin_search(elem, s):
     """
     Linear search function
@@ -135,12 +129,11 @@ def lin_search(elem, s):
     """
     for i, e in enumerate(s):
         if e == elem:
-            return(i)
-            break
+            return i
 
 s = [1, 3, 4, 5, 6, 7, 8, 6.1, 6.1]
 print(lin_search(6.1, s))
-# тут достаточно индекса первого вхождения?
+
 
 ## Task 5. *Имплементируйте бинарный поиск (принимает на вход элемент и отсортированный список,
 # возвращает индекс с этим элементом) (15 баллов)
@@ -152,21 +145,17 @@ def bin_search(elem, s):
     :return: index of the element
     """
     first = 0
-    last = len(s)-1
-    found = False
+    last = len(s) - 1
 
-    while first<=last and not found:
-        pos = 0
-        midpoint = (first + last)//2
+    while first <= last:
+        midpoint = (first + last) // 2
         if s[midpoint] == elem:
-            pos = midpoint
-            found = True
+            return midpoint
+        elif elem <= s[midpoint]:
+            last = midpoint - 1
         else:
-            if elem < s[midpoint]:
-                last = midpoint-1
-            else:
-                first = midpoint+1
-    return (pos)
+            first = midpoint + 1
 
 s = [1, 3, 4, 5, 6, 7, 8, 90, 150.4, 200, 1000]
-print(lin_search(150.4, s))
+print(bin_search(1000, s))
+print(bin_search(2, s))
