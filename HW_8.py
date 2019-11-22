@@ -1,12 +1,65 @@
 ## Task 1. Создайте пару файлов (наполненных каким-то кодом), один из которых импортируется в другом,
 # удостоверьтесь, что при импорте выполняется импортируемый файл (5 баллов)
+"""
+Завела File_1.py c таким кодом
+print('Hi from File_1')
+def myfun():
+    return 42
+
+Потом File_2.py c кодом
+import File_1
+print("Hi")
+print(File_1.myfun())
+"""
+
+import File_2
+"""
+Hi from File_1
+Hi
+42
+"""
+print(File_2.File_1.myfun())
+## 42
+
+from File_2 import *
+"""
+Hi from File_1
+Hi
+42
+"""
+print(File_1.myfun())
+## 42
+
+
 
 ## Task 2. Создайте функцию, которая получает на вход путь к файлу, который нужно считать,
 # путь к файлу, куда будет идти сохранение, и номера строк с которой и до какой нужно переписать
 # содержимое из одного файла в другой (то есть она выдирает часть текста из одного файла в другой),
 # если номера строк не были переданы - копирует содержимое файла целиком (10 баллов)
+def rewright(iz, v, first = -1, last = 1):
+    with open(iz, 'r') as source, open(v, 'w') as destin:
+        cont = source.readlines()
+        n = len(cont)
+        if first >= 0 and last:
+            for i in range(first, last + 1):
+                destin.write(cont[i])
+        else:
+            for i in range(0, n):
+                destin.write(cont[i])
+
+rewright('text1.txt', 'text2.txt')
+
 
 ## Task 3. Посмотрите на либы для рисования графов, выберите понравившуюся и визуализируйте какой-нибудь граф (10 баллов)
+import networkx
+import pytest
+import matplotlib.pyplot
+
+G = {1: [2, 3], 2: [1, 4, 5], 3: [1, 5], 4: [2], 5: [2, 3]}
+NN = networkx.DiGraph()
+NN.add_edge([2, 3])
+networkx.draw(NN, G)
+matplotlib.pyplot.subplot(121)
 
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
 # переданном в формате списка связности (для этого можно использовать dfs) (15 баллов)
