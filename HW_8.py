@@ -11,8 +11,9 @@
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
 # переданном в формате списка связности (для этого можно использовать dfs) (15 баллов)
 
+
 ## Task 5. Установите модуль biopython
-'''
+"""
 Я сделяль)))))))))
 C:\Users\Ekaterina\AppData\Local\Programs\Python\Python38\Scripts\pip install biopython
 Requirement already satisfied: biopython in c:\users\ekaterina\appdata\local\programs\python\python38\lib\site-packages (1.75)
