@@ -48,7 +48,8 @@ def rewright(iz, v, first = -1, last = 1):
                 destin.write(cont[i])
 
 rewright('text1.txt', 'text2.txt')
-
+rewright('text1.txt', 'text2.txt', 0, 12)
+# обе работают) Файлы txt тоже на гитхаб положить?
 
 ## Task 3. Посмотрите на либы для рисования графов, выберите понравившуюся и визуализируйте какой-нибудь граф (10 баллов)
 import networkx
@@ -58,7 +59,7 @@ import matplotlib.pyplot
 G = {1: [2, 3], 2: [1, 4, 5], 3: [1, 5], 4: [2], 5: [2, 3]}
 NN = networkx.DiGraph()
 NN.add_edge([2, 3])
-networkx.draw(NN, G)
+networkx.draw(NN, G) # Пока ничего не пашет
 matplotlib.pyplot.subplot(121)
 
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
@@ -66,6 +67,7 @@ matplotlib.pyplot.subplot(121)
 
 
 ## Task 5. Установите модуль biopython
+
 """
 Я сделяль)))))))))
 C:\Users\Ekaterina\AppData\Local\Programs\Python\Python38\Scripts\pip install biopython
