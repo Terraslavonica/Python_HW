@@ -36,18 +36,24 @@ print(File_1.myfun())
 # путь к файлу, куда будет идти сохранение, и номера строк с которой и до какой нужно переписать
 # содержимое из одного файла в другой (то есть она выдирает часть текста из одного файла в другой),
 # если номера строк не были переданы - копирует содержимое файла целиком (10 баллов)
-def rewright(iz, v, first = -1, last = 1):
+def rewright(iz, v, first = None, last = None):
     with open(iz, 'r') as source, open(v, 'w') as destin:
         cont = source.readlines()
         n = len(cont)
         if first >= 0 and last:
             for i in range(first, last + 1):
                 destin.write(cont[i])
+        elif first and not last:
+            for i in range(first, n):
+                destin.write(cont[i])
+        elif not first and last:
+            for i in range(0, last + 1):
+                destin.write(cont[i])
         else:
             for i in range(0, n):
                 destin.write(cont[i])
 
-rewright('text1.txt', 'text2.txt')
+rewright('text1.txt', 'text2.txt', first = 1)
 rewright('text1.txt', 'text2.txt', 0, 12)
 # обе работают) Файлы txt тоже на гитхаб положить?
 
