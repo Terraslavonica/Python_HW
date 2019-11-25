@@ -39,8 +39,8 @@ print(File_1.myfun())
 def rewright(iz, v, first = None, last = None):
     """
     Rewrite the content of one file to another file fully or partially
-    :param iz: - path to file from which the content will be written
-    :param v: - path to file in which the content will be written
+    :param iz: - str - path to file from which the content will be written
+    :param v: - str - path to file in which the content will be written
     :param first: - int or None - line number from which the content start to rewrite
     :param last: - int or None - line number till which the content will be rewrite
     :return: the second file will contain the content of the first file fully or partially
