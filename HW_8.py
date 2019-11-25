@@ -37,25 +37,34 @@ print(File_1.myfun())
 # содержимое из одного файла в другой (то есть она выдирает часть текста из одного файла в другой),
 # если номера строк не были переданы - копирует содержимое файла целиком (10 баллов)
 def rewright(iz, v, first = None, last = None):
+    """
+    Rewrite the content of one file to another file fully or partially
+    :param iz: - path to file from which the content will be written
+    :param v: - path to file in which the content will be written
+    :param first: - int or None - line number from which the content start to rewrite
+    :param last: - int or None - line number till which the content will be rewrite
+    :return: the second file will contain the content of the first file fully or partially
+    """
     with open(iz, 'r') as source, open(v, 'w') as destin:
         cont = source.readlines()
         n = len(cont)
-        if first >= 0 and last:
-            for i in range(first, last + 1):
-                destin.write(cont[i])
-        elif first and not last:
-            for i in range(first, n):
-                destin.write(cont[i])
-        elif not first and last:
-            for i in range(0, last + 1):
-                destin.write(cont[i])
-        else:
+        if not first and not last:
             for i in range(0, n):
                 destin.write(cont[i])
+        elif first and not last:
+                for i in range(first, n):
+                    destin.write(cont[i])
+        elif not first and last:
+                for i in range(0, last + 1):
+                    destin.write(cont[i])
+        else:
+            for i in range(first, last + 1):
+                destin.write(cont[i])
 
+rewright('text1.txt', 'text2.txt')
 rewright('text1.txt', 'text2.txt', first = 1)
+rewright('text1.txt', 'text2.txt', last = 3)
 rewright('text1.txt', 'text2.txt', 0, 12)
-# обе работают) Файлы txt тоже на гитхаб положить?
 
 ## Task 3. Посмотрите на либы для рисования графов, выберите понравившуюся и визуализируйте какой-нибудь граф (10 баллов)
 import networkx
