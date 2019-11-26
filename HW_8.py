@@ -67,15 +67,11 @@ rewright('text1.txt', 'text2.txt', last = 3)
 rewright('text1.txt', 'text2.txt', 0, 12)
 
 ## Task 3. Посмотрите на либы для рисования графов, выберите понравившуюся и визуализируйте какой-нибудь граф (10 баллов)
-import networkx
-import pytest
-import matplotlib.pyplot
-
-G = {1: [2, 3], 2: [1, 4, 5], 3: [1, 5], 4: [2], 5: [2, 3]}
-NN = networkx.DiGraph()
-NN.add_edge([2, 3])
-networkx.draw(NN, G) # Пока ничего не пашет
-matplotlib.pyplot.subplot(121)
+import networkx as nx
+G = nx.Graph()
+G.add_nodes_from([1, 2, 3, 4, 5, 6, 7])
+G.add_edges_from([(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2), (3, 4), (4, 3), (4, 5), (4, 7), (5, 4), (5, 6), (6, 5), (6, 7), (7, 6), (7, 4)])
+nx.draw(G) # пашет
 
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
 # переданном в формате списка связности (для этого можно использовать dfs) (15 баллов)
