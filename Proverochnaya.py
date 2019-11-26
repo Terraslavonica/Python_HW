@@ -19,33 +19,35 @@ print(BSort(a))
 
 
 ##2. Поиск генов в строке ДНК
-def genseq(DNA):
-    string = DNA
+def genes(DNA):
+    import re
+    res = []
     f = True
-    genes = [] # в это вектор будем записывать гены
     while f:
-        start = string.find('ATG') # ищем старт-кодон
-        if start == -1: # если не нашли, то переходим на return
-            break
-        string = string[start + 3:] # отрежем старт-кодон, чтобы два последних нуклеотида в нем не совпали со стоп-кодоном 'TGA'
-        # также это удобно при проверке триплетности
-        fn = BSort([string.find('TAA'), string.find('TAG'), string.find('TGA')]) # отсортируем позиции возможных стопкодонов
-        if fn == []: # если не нашли ни одного стоп-кодона, то переходим на return
-            break
-        stop = 0
-        for i in fn:
-            if i > 0 and i >= 9 and not (i % 3): # если ген достаточно длинный, то берем ближайший стоп-кодон и идем дальше
-                genes.append('ATG' + string[0: i + 3])
-                stop = i
-                break
-            if i > 0 and i < 12 and not (i % 3): # здесь отсекаем случаи коротких генов + проверяем, чтобы рамка считывания не сдвигалась, отрезаем
-                string = string[i + 3:]
-                break
-        if stop == 0: # если не нашли отвечающий условиям стоп-кодон, ищем следующий старт-кодон
-            continue
-    return genes
+        gene = re.findall('(ATG(...)+?(TAG|TAA|TGA))', DNA)
+        if gene and len(gene[0][0]) >= 15 and not (len(gene[0][0]) % 3):
+            res.append(gene[0][0])
+        n = DNA.find('ATG')
+        DNA = DNA[n + 3:] # обрезаем первый старт-кодон, чтобы найти более короткий ген, если есть стоп-кодон внутри предыдущего гена
+        if DNA.find('ATG') == -1:
+            f = False
+    return res
 
+def genseq(DNA):
+    DNA = DNA.upper()
+    res1 = genes(DNA)
+    DNA = DNA.translate(str.maketrans('ATGC', 'TACG'))[::-1]
+    res2 = genes(DNA)
+    return (res1+res2)
 
-string = 'ATGAAAAAAATGAAAAAAGAAAAATGAAAAAAAGGAAAAATGAAAAAGGGAAAAAAATAAACCCATGCCCCCCTGACCCCATGCCCCCCCCCCCCCCCTAAAAATG'
-          ATGAAAAAAATGAAAAAAAAAAAATGAAAAAAAAAAAAAATGAAAAAGGGAAAAAAATAA
-print(genseq(string))
+DNA = 'atgAAAAAAATGAAAAAAGAAAAATGACATTTTTAGGGGGGGGGGGGGGGCAT'
+genseq(DNA)
+
+DNA = 'atgAAAAAAATGAAAAAAGAAAAATGAAAAAAAGGAAAAATGAAAAAGGGAAAAAAATAAACCCATGCCCCCCTGACCCCATGCCCCCCCCCCCCCCCTAAAAATG'
+print(genseq(DNA))
+
+DNA = 'ATGAAAAAAATGAAAAAAGAAAAATGAAAAAAAGGAAAAATGAAAAAGGGAAAAAAATAAACCCATGCCCCCCTGACCCCATGCCCCCCCCCCCCCCCTAAAAATG'
+print(genseq(DNA))
+
+seq = "ACAAGATGCCATTGTCCCCCGGCCTCCTGCTGCTGCTGCTCTCCGGGGCCACGGCCACCGCTGCCCTGCCCCTGGAGGGTGGCCCCACCGGCCGAGACAGCGAGCATATGCAGGAAGCGGCAGGAATAAGGAAAAGCAGCCTCCTGACTTTCCTCGCTTGGTGGTTTGAGTGGACCTCCCAGGCCAGTGCCGGGCCCCTCATAGGAGAGGAAGCTCGGGAGGTGGCCAGGCGGCAGGAAGGCGCACCCCCCCAGCAATCCGCGCGCCGGGACAGAATGCCCTGCAGGAACTTCTTCTGGAAGACCTTCTCCTCCTGCAAATAAAACCTCACCCATGAATGCTCACGCAAGTTTAATTACAGACCTGAA"
+print(genseq(seq))
