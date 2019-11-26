@@ -71,7 +71,33 @@ import networkx as nx
 G = nx.Graph()
 G.add_nodes_from([1, 2, 3, 4, 5, 6, 7])
 G.add_edges_from([(1, 2), (1, 3), (2, 1), (2, 3), (3, 1), (3, 2), (3, 4), (4, 3), (4, 5), (4, 7), (5, 4), (5, 6), (6, 5), (6, 7), (7, 6), (7, 4)])
-nx.draw(G) # пашет
+nx.draw(G, with_labels=True) # с именами верщин
+
+import matplotlib.pyplot as plt
+nx.draw_shell(G, nlist=[range(4, 8), range(4)], with_labels=True)
+
+options = { # в options указаны цвета вершин и ребер, толщина ребер и размер вершин
+    'node_color': 'green',
+    'edge_color': 'red',
+    'node_size': 200,
+    'width': 1,
+}
+nx.draw_shell(G, **options, nlist=[range(4, 8), range(4)], with_labels=True)
+
+# милота :)
+K_3_5 = nx.complete_bipartite_graph(3, 5)
+nx.draw(K_3_5)
+lollipop = nx.lollipop_graph(100, 40)
+nx.draw(lollipop)
+tutte = nx.tutte_graph()
+nx.draw(tutte)
+petersen = nx.petersen_graph()
+nx.draw(petersen)
+maze = nx.sedgewick_maze_graph()
+nx.draw(maze)
+tet = nx.tetrahedral_graph()
+nx.draw(tet)
+
 
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
 # переданном в формате списка связности (для этого можно использовать dfs) (15 баллов)
