@@ -83,6 +83,7 @@ options = { # в options указаны цвета вершин и ребер, �
     'width': 1,
 }
 nx.draw_shell(G, **options, nlist=[range(4, 8), range(4)], with_labels=True)
+plt.savefig("mygraph.png") # сохраним
 
 # милота :)
 K_3_5 = nx.complete_bipartite_graph(3, 5)
@@ -101,6 +102,48 @@ nx.draw(tet)
 
 ## Task 4. Напишите функцию, вычисляющую число компонент связности в графе,
 # переданном в формате списка связности (для этого можно использовать dfs) (15 баллов)
+def search(vertex, graph, visited):
+    """
+    Function helper to move in graph
+    :param vertex: hashable - current vertex
+    :param graph: dict - "adjacency dict" in a form {vertex: [neighbours...]}
+    :param visited: dict - dict with visited vertices in a form {vertex: True/False}
+    :return:
+    """
+    # Mark vertex as visited
+    visited[vertex] = True
+
+    # Go to other vertex, adjacent to current, if they weren't visited before
+    for neighbour in graph[vertex]:
+        if not visited[neighbour]:
+            # print(vertex, neighbour, visited)
+            search(neighbour, graph, visited)
+        # print(vertex, neighbour, visited)
+
+
+def dfs(graph):
+    """
+    Function to apply depth-first search to a graph
+    :param graph: dict - "adjacency dict" in a form {vertex: [neighbours...]}
+    :return:
+    """
+    # Create dict of visited vertices
+    visited = {v: False for v in graph}
+
+    # Visit all reachable vertices from vertex for all vertices
+    q = 0
+    for v in graph:
+        if not visited[v]:
+            q += 1
+            search(v, graph, visited)
+    return q
+
+
+graph = {1: [2, 3], 2: [1, 4, 5], 3: [1, 5], 4: [2], 5: [2, 3], 6: [7], 7: [6], 8: [], 9: [10], 10: [9]}
+print(dfs(graph))
+
+graph1 = {1: [], 2: [], 3: [], 4: [], 5: [], 6: []}
+print(dfs(graph1))
 
 
 ## Task 5. Установите модуль biopython
