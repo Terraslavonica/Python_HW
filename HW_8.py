@@ -116,9 +116,7 @@ def search(vertex, graph, visited):
     # Go to other vertex, adjacent to current, if they weren't visited before
     for neighbour in graph[vertex]:
         if not visited[neighbour]:
-            # print(vertex, neighbour, visited)
             search(neighbour, graph, visited)
-        # print(vertex, neighbour, visited)
 
 
 def dfs(graph):
