@@ -20,6 +20,11 @@ print(BSort(a))
 
 ##2. Поиск генов в строке ДНК
 def genes(DNA):
+    """
+    Function that search the genes in DNA string
+    :param DNA: string - DNA where we should find all genes
+    :return: the list of the genes
+    """
     import re
     res = []
     f = True
@@ -34,6 +39,11 @@ def genes(DNA):
     return res
 
 def genseq(DNA):
+    """
+    Function that use the previous one to look for the genes in the DNA string and in the complementary one
+    :param DNA: string - DNA string where we should find all genes and genes in the complementary one
+    :return: the list of the genes in DNA string and  in the complementary one
+    """
     DNA = DNA.upper()
     res1 = genes(DNA)
     DNA = DNA.translate(str.maketrans('ATGC', 'TACG'))[::-1]
