@@ -25,10 +25,10 @@ def genes(DNA):
     f = True
     while f:
         gene = re.findall('(ATG(...)+?(TAG|TAA|TGA))', DNA)
-        if gene and len(gene[0][0]) >= 15 and not (len(gene[0][0]) % 3):
+        if gene and len(gene[0][0]) >= 15: # and not (len(gene[0][0]) % 3) это уже выполнено у re
             res.append(gene[0][0])
         n = DNA.find('ATG')
-        DNA = DNA[n + 3:] # обрезаем первый старт-кодон, чтобы найти более короткий ген, если есть стоп-кодон внутри предыдущего гена
+        DNA = DNA[n + 3:] # обрезаем первый старт-кодон, чтобы найти более короткий ген, если есть старт-кодон внутри предыдущего гена
         if DNA.find('ATG') == -1:
             f = False
     return res
