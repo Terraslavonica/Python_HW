@@ -42,7 +42,7 @@ def zeros(rows, cols):
     # Return the matrix of zeros
     return empty
 
-def NWal(seqs, g, m, mm):
+def nwal(seqs, g, m, mm):
     """
     Function that makes Needleman-Wunsch alignment
     :param seqs: str - path to the fasta-file with two strings that should be aligned
@@ -64,6 +64,7 @@ def NWal(seqs, g, m, mm):
         else:
             return mismatch
 
+    from Bio import SeqIO
     record = list(SeqIO.parse(seqs, "fasta"))
     seq1 = str(record[0].seq)
     seq2 = str(record[1].seq)
@@ -147,9 +148,9 @@ def NWal(seqs, g, m, mm):
 
     return rez
 
-print(NWal('test.fasta', -1, 1, -1))
-print(NWal('test1.fasta', -1, 0, -1))
-print(NWal('subsample_2.fasta', -1, 0, -2))
+print(nwal('test.fasta', -1, 1, -1))
+print(nwal('test1.fasta', -1, 0, -1))
+print(nwal('subsample_2.fasta', -1, 0, -2))
 
 
 # Task 3. *Напишите функцию, выполняющую локальное выравнивание 2-ух последовательностей input путь к фаста файлу
