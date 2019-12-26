@@ -8,15 +8,22 @@ plt.title('Nice function')
 plt.xlabel('$x$')
 plt.ylabel('$y$')
 plt.grid(True)
-plt.savefig('Task1.png')
+plt.savefig('HW10_Task1.png')
 
-type(ys)
 
 # Task 2. Сделайте программу, принимающую путь к fasta, и выводящую распределение длин последовательностей в ней (10 баллов)
 def fastadist(iz):
-    with open iz as fasta:
+    from Bio import SeqIO
+    import matplotlib.pyplot as plt
+    dlinyi = []
+    for record in SeqIO.parse(iz, "fasta"):
+        dlinyi.append(len(record.seq))
+        gr = plt.hist(dlinyi, bins=60)
+        plt.savefig('HW10_Task2.png')
+    return gr
 
-
+fastadist("seqs.fasta")
+fastadist("selected.fasta")
 
 ## Task 3. Нарисуйте свой любимый график (не обязательно на основе многих данных -
 # генерацию данных разберём на следующем занятии) (15 баллов)
@@ -36,7 +43,8 @@ ax1.set_title('My favourite Plot')
 ax1.boxplot(data_to_plot)
 ax1.set_xlabel('ось x')
 ax1.set_ylabel('ось y')
+plt.savefig('HW10_Task3.png')
 
 ## Task 4.*Уникальный квест - выберите тип визуализации, который вам нравится, разберитесь как создавать такие визуализации,
 # кастомизировать их и расскажите всем как!) Нужна небольшая презенташка с кодом и полученными графиками (15 баллов)
-# Сделала
+# Сделала про ящики с усами
