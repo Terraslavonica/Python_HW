@@ -19,11 +19,15 @@ def fastadist(iz):
     for record in SeqIO.parse(iz, "fasta"):
         dlinyi.append(len(record.seq))
         gr = plt.hist(dlinyi, bins=60)
+        plt.title('distribution of length')
+        plt.xlabel('length')
+        plt.ylabel('number')
         plt.savefig('HW10_Task2.png')
     return gr
 
 fastadist("seqs.fasta")
 fastadist("selected.fasta")
+
 
 ## Task 3. Нарисуйте свой любимый график (не обязательно на основе многих данных -
 # генерацию данных разберём на следующем занятии) (15 баллов)
@@ -44,6 +48,7 @@ ax1.boxplot(data_to_plot)
 ax1.set_xlabel('ось x')
 ax1.set_ylabel('ось y')
 plt.savefig('HW10_Task3.png')
+
 
 ## Task 4.*Уникальный квест - выберите тип визуализации, который вам нравится, разберитесь как создавать такие визуализации,
 # кастомизировать их и расскажите всем как!) Нужна небольшая презенташка с кодом и полученными графиками (15 баллов)
