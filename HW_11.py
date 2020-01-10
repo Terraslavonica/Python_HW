@@ -1,57 +1,9 @@
-import numpy as np
-import random
-import time
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-
 ## Task 1. Создайте 3 эррея различными способами (5 баллов)
-ar1 = np.array([10, 21, 32, 43, 54, 65], dtype=np.int8)
-print(ar1)
-
-ar2 = np.full((5, 5, 3), 69) # Клево, выдает 3 штуки :)
-print(ar2)
-
-ar3 = np.full((3, 5), "Hello world")
-print(ar3)
-
-ar4 = np.arange(100, 200, 15)
-print(ar4)
 
 
 ## Task 2. Замерьте время вычисления чисел от 0 до 1 из равномерного распределения с помощью модулей random и numpy,
 # изобразите зависимость времени вычисления от количества вычисляемых чисел для них. Другими словами - по x идёт то,
 # сколько чисел за прогон вы взяли от 0 до 1, а по y - время, которое это заняло для random и numpy (10 баллов)
-
-## 1
-timenp = []
-numbnp = []
-for i in range(1000, 1000000, 10000):
-    numbnp.append(i)
-    start = time.time()
-    npr = np.random.uniform(low=0.0, high=1.0, size=i)
-    stop = time.time()
-    timenp.append(stop - start)
-print(timenp)
-len(timenp)
-plt.scatter(numbnp, timenp, c="blue")
-
-## 2
-timeran = []
-numbran = []
-for i in range(1000, 1000000, 10000):
-    numbran.append(i)
-    start = time.time()
-    for j in range(i):
-        random.random()
-    stop = time.time()
-    timeran.append(stop - start)
-print(timeran)
-len(timeran)
-plt.scatter(numbran, timeran, c="red")
-
-## Сделать функцией?
-## Наверное, для модуля random нужно как-то иначе, но я не поняла пока как, кроме как петлей
 
 
 # Task 3. Сделайте функцию для проверки является ли список отсортированным (без использования sorted или sort).
@@ -63,7 +15,6 @@ plt.scatter(numbran, timeran, c="red")
 ## Task 4. Визуализируйте random walk (случайная прогулка, да)) в 2-мерном пространстве, где вы начинаете в (0, 0)
 # и можете перемещаться вверх, вниз, вправо и влево Как визуализировать - скаттерплот, где по x - x, а по y - y (10 баллов)
 ## не случайная прогулка, а случайное блуждание!
-
 
 ## Task 5. Сгенерируйте и нарисуйте треугольник Серпинского (15 баллов)
 
