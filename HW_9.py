@@ -1,23 +1,24 @@
+from Bio import SeqIO
+
 # Task 1. Сделайте функцию, конвертирующую переданный fastq файл в fasta,
 # отбирая только последовательности длиннее заданного числа, по умолчанию 50, input путь к fastq файлу путь к файлу,
 # куда будет записана fasta минимальная длина последовательности
-def fastqtofasta(iz, v, lenmin = 50):
+def fastqtofasta(input, output, lenmin = 50):
     """
     Function that makes fasta-file from fastq-file
-    :param iz: str - path to fastq-file
-    :param v: str - path to fasta-file
+    :param input: str - path to fastq-file
+    :param output: str - path to fasta-file
     :param lenmin: int - the length of the sequence, lines longer than lenmin will be written to fasta-file
     :return: fasta-file made from fastq-file
     """
-    from Bio import SeqIO
-    seqs = list(SeqIO.parse(iz, 'fastq'))
+    seqs = list(SeqIO.parse(input, 'fastq'))
     rez = list()
     for i in seqs:
         if len(i.seq) > lenmin:
             rez.append(i)
-        SeqIO.write(rez, v, 'fasta')
+        SeqIO.write(rez, output, 'fasta')
 
-fastqtofasta('sample.fastq', 'subsample_2.fasta')
+fastqtofasta('sample.fastq', 'subsample_2.fasta', 10)
 
 # Task 2. Напишите функцию, выполняющую глобальное выравнивание 2-ух последовательностей input путь к фаста файлу
 # с 2-мя последовательностями скор за мэтч скор за мисмэтч скор за гэп, output кортеж из скора и строки выравнивания
@@ -31,40 +32,31 @@ def zeros(rows, cols):
     """
     # Define an empty list
     empty = []
-    # Set up the rows of the matrix
+    # Generate the matrix of zeros
     for x in range(rows):
-        # For each row, add an empty list
-        empty.append([])
-        # Set up the columns in each row
-        for y in range(cols):
-            # Add a zero to each column in each row
-            empty[-1].append(0)
+        empty.append([0 for y in range(cols)])
     # Return the matrix of zeros
     return empty
 
-def nwal(seqs, g, m, mm):
+zeros(2,3) # [[0, 0, 0], [0, 0, 0]] работает :)
+
+def nwal(seqs, gap, match, mismatch):
     """
     Function that makes Needleman-Wunsch alignment
     :param seqs: str - path to the fasta-file with two strings that should be aligned
-    :param g: float - penalty for the gap
-    :param m: float - award for the match
-    :param mm: float - penalty foe the mismatch
+    :param gap: float - penalty for the gap
+    :param match: float - award for the match
+    :param mismatch: float - penalty for the mismatch
     :return: tuple with score and two aligned strings
     """
-    gap = g
-    match = m
-    mismatch = mm
 
     # A function for determining the score between any two bases in alignment
     def match_score(a, b):
         if a == b:
             return match
-        elif a == '-' or b == '-':
-            return gap
         else:
             return mismatch
 
-    from Bio import SeqIO
     record = list(SeqIO.parse(seqs, "fasta"))
     seq1 = str(record[0].seq)
     seq2 = str(record[1].seq)
@@ -72,6 +64,7 @@ def nwal(seqs, g, m, mm):
     n = len(seq1)
     m = len(seq2)
 
+    # Generate the matrix of zeros
     score = zeros(m + 1, n + 1)
 
     # Calculate score table
@@ -148,12 +141,15 @@ def nwal(seqs, g, m, mm):
 
     return rez
 
-print(nwal('test.fasta', -1, 1, -1))
-print(nwal('test1.fasta', -1, 0, -1))
-print(nwal('subsample_2.fasta', -1, 0, -2))
-
+print(*nwal('test.fasta', -1, 1, -1), sep='\n') # (1, 'CAT\nCAR')
+print(*nwal('test1.fasta', -1, 0, -1), sep='\n') # (0, 'CATCATCARACT\nCARDOGC--A-T')
+print(*nwal('subsample_2.fasta', -1, 0, -2), sep='\n')
+# 0 за гэп - ну туповато получается, мисметчи как результат мутации вполне вероятны, даже больше, чем инделы, при последних же рамка считывания едет :)
+print(*nwal('test.fasta', 0, 1, -1), sep='\n') # (1, 'CA-T\nCAR-')
+print(*nwal('test1.fasta', 0, 0, -1), sep='\n') # (0, '------CATCATCARACT\nCARDOG------C--A-T')
+print(*nwal('subsample_2.fasta', 0, 0, -2), sep='\n')
 
 # Task 3. *Напишите функцию, выполняющую локальное выравнивание 2-ух последовательностей input путь к фаста файлу
 # с 2-мя последовательностями скор за мэтч скор за мисмэтч скор за гэп output кортеж из скора и строки выравнивания
 
-# напишу на каникулахх обязательно
+# напишу на каникулах обязательно (если что, каникулы до 8 февраля :))
