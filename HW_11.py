@@ -169,11 +169,13 @@ plt.scatter(x, y, s=1, c = 'purple')
 # бсепордяке, все-рвано ткест чтаитсея без побрелм. Пичрионй эгото ялвятеся то, что мы не чиаетм кдаужю бкуву по
 # отдльенотси, а все солво цлиеком." (10 баллов)
 
+# пока не получилось, но, думаю, я сделаю
+
 
 ## Task 7. *Сгенерируйте и нарисуйте коврик Серпинского. Судя по всему придётся вырезать куски квадрата,
 # а не генерировать точками (15 баллов)
 # defining the number of steps
-n = 150000
+n = 100000
 # creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
 x = np.zeros(n)
 y = np.zeros(n)
