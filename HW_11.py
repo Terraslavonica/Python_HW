@@ -136,7 +136,31 @@ plt.scatter(x, y, s=1, c = 'green')
 
 
 ## Task 5. Сгенерируйте и нарисуйте треугольник Серпинского (15 баллов)
-# пока не получилось! :( сделаю обязательно!
+# defining the number of steps
+n = 15000
+# creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
+x = np.zeros(n)
+y = np.zeros(n)
+# Choose the vertex of a triangle
+A = np.array([8, 3])
+B = np.array([5, -1])
+C = np.array([-3, -2])
+# filling the coordinates with random variables
+for i in range(1, n):
+    val = random.randint(1, 3)
+    if val == 1:
+        x[i] = x[i - 1] + (A[0] - x[i - 1]) / 2
+        y[i] = y[i - 1] + (A[1] - y[i - 1]) / 2
+    elif val == 2:
+        x[i] = x[i - 1] + (B[0] - x[i - 1]) / 2
+        y[i] = y[i - 1] + (B[1] - y[i - 1]) / 2
+    else:
+        x[i] = x[i - 1] + (C[0] - x[i - 1]) / 2
+        y[i] = y[i - 1] + (C[1] - y[i - 1]) / 2
+# plotting the graph
+plt.title("Sierpinski triangle ($n = " + str(n) + "$ steps)")
+plt.scatter(x, y, s=1, c = 'purple')
+
 
 ## Task 6. *Сделайте программу, получающую на вход текст, и выдающую этот же текст со следующими изменениями - буквы
 # во всех словах кроме первой и последней перемешаны. Для простоты пока будем считать, что пунктуации нет.
@@ -148,3 +172,47 @@ plt.scatter(x, y, s=1, c = 'green')
 
 ## Task 7. *Сгенерируйте и нарисуйте коврик Серпинского. Судя по всему придётся вырезать куски квадрата,
 # а не генерировать точками (15 баллов)
+# defining the number of steps
+n = 150000
+# creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
+x = np.zeros(n)
+y = np.zeros(n)
+# Choose 8 attracting points
+A = np.array([1, 1])
+B = np.array([-1, 1])
+C = np.array([-1, -1])
+D = np.array([1, -1])
+E = np.array([(A[0]+B[0])/2, (A[1]+B[1])/2])
+F = np.array([(C[0]+B[0])/2, (C[1]+B[1])/2])
+G = np.array([(C[0]+D[0])/2, (C[1]+D[1])/2])
+H = np.array([(A[0]+D[0])/2, (A[1]+D[1])/2])
+# filling the coordinates with random variables
+for i in range(1, n):
+    val = random.randint(1, 8)
+    if val == 1:
+        x[i] = (x[i - 1] + 2 * A[0]) / 3
+        y[i] = (y[i - 1] + 2 * A[1]) / 3
+    elif val == 2:
+        x[i] = (x[i - 1] + 2 * B[0]) / 3
+        y[i] = (y[i - 1] + 2 * B[1]) / 3
+    elif val == 3:
+        x[i] = (x[i - 1] + 2 * C[0]) / 3
+        y[i] = (y[i - 1] + 2 * C[1]) / 3
+    elif val == 4:
+        x[i] = (x[i - 1] + 2 * D[0]) / 3
+        y[i] = (y[i - 1] + 2 * D[1]) / 3
+    elif val == 5:
+        x[i] = (x[i - 1] + 2 * E[0]) / 3
+        y[i] = (y[i - 1] + 2 * E[1]) / 3
+    elif val == 6:
+        x[i] = (x[i - 1] + 2 * F[0]) / 3
+        y[i] = (y[i - 1] + 2 * F[1]) / 3
+    elif val == 7:
+        x[i] = (x[i - 1] + 2 * G[0]) / 3
+        y[i] = (y[i - 1] + 2 * G[1]) / 3
+    else:
+        x[i] = (x[i - 1] + 2 * H[0]) / 3
+        y[i] = (y[i - 1] + 2 * H[1]) / 3
+# plotting the graph
+plt.title("Sierpinski carpet ($n = " + str(n) + "$ steps)")
+plt.scatter(x, y, s=1, c = 'blue')
