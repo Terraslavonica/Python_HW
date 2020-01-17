@@ -21,7 +21,7 @@ print(ar4)
 ## Task 2. Замерьте время вычисления чисел от 0 до 1 из равномерного распределения с помощью модулей random и numpy,
 # изобразите зависимость времени вычисления от количества вычисляемых чисел для них. Другими словами - по x идёт то,
 # сколько чисел за прогон вы взяли от 0 до 1, а по y - время, которое это заняло для random и numpy (10 баллов)
-##1
+
 def timerandom(gofrom, goto, step):
     timeran = []
     numbran = range(gofrom, goto, step)
@@ -31,7 +31,7 @@ def timerandom(gofrom, goto, step):
             random.random()
         stop = time.time()
         timeran.append(stop - start)
-    return (timeran, numbran)
+    #return timeran
 
 def timenumpy(gofrom, goto, step):
     timenp = []
@@ -41,18 +41,20 @@ def timenumpy(gofrom, goto, step):
         npr = np.random.uniform(low=0.0, high=1.0, size=i)
         stop = time.time()
         timenp.append(stop - start)
-    return (timenp, numbnp)
+    #return timenp
 
-timerandom(1000, 1000000, 10000)
-timenumpy(1000, 1000000, 10000)
-
-def mytimeplot(timeran, timenp): # вечером доделаю, не работает пока ничего
-    plt.figure(figsize=(12, 8))
+def mytimeplot(gofrom, goto, step):
+    timeran = timerandom(gofrom, goto, step)
+    timenp = timenumpy(gofrom, goto, step)
+    numbran = range(gofrom, goto, step)
+    numbnp = range(gofrom, goto, step)
+    gr = plt.figure(figsize=(12, 8))
     plt.scatter(numbran, timeran, c="red", label='random')
     plt.scatter(numbnp, timenp, c="blue", label='numpy')
     plt.legend()
+    return gr
 
-mytimeplot(timeran, timenp)
+mytimeplot(1000, 1000000, 10000)
 
 
 # Task 3. Сделайте функцию для проверки является ли список отсортированным (без использования sorted или sort).
@@ -85,7 +87,7 @@ monkeymean = [] # average sorting time
 monkeysd = [] # standard deviation of sorting time
 size = []
 progon = range(15) # number of repetition for the same data size
-for i in range(2, 10000, 50):
+for i in range(2, 15, 2):
     timepr = []
     size.append(i)
     for j in progon:
@@ -100,7 +102,8 @@ for i in range(2, 10000, 50):
     monkeysd.append(timesd)
 
 plt.title("Monkey time")
-plt.scatter(size, monkeymean, c = 'green', label='mean time' )
+plt.scatter(size, monkeymean, c = 'green', label='mean time')
+plt.errorbar(size, monkeymean, monkeysd, linestyle='None')
 plt.scatter(size, monkeysd, c = 'red', label='sd of time')
 plt.xlabel('sample size')
 plt.ylabel('time')
