@@ -22,34 +22,37 @@ print(ar4)
 # изобразите зависимость времени вычисления от количества вычисляемых чисел для них. Другими словами - по x идёт то,
 # сколько чисел за прогон вы взяли от 0 до 1, а по y - время, которое это заняло для random и numpy (10 баллов)
 ##1
-timeran = []
-numbran = []
-for i in range(1000, 1000000, 10000):
-    numbran.append(i)
-    start = time.time()
-    for j in range(i):
-        random.random()
-    stop = time.time()
-    timeran.append(stop - start)
+def timerandom(gofrom, goto, step):
+    timeran = []
+    numbran = range(gofrom, goto, step)
+    for i in numbran:
+        start = time.time()
+        for j in range(i):
+            random.random()
+        stop = time.time()
+        timeran.append(stop - start)
+    return (timeran, numbran)
 
-plt.figure(figsize=(12, 8))
-plt.scatter(numbran, timeran, c="red", label='random')
+def timenumpy(gofrom, goto, step):
+    timenp = []
+    numbnp = range(gofrom, goto, step)
+    for i in numbnp:
+        start = time.time()
+        npr = np.random.uniform(low=0.0, high=1.0, size=i)
+        stop = time.time()
+        timenp.append(stop - start)
+    return (timenp, numbnp)
 
-##2
-timenp = []
-numbnp = []
-for i in range(1000, 1000000, 10000):
-    numbnp.append(i)
-    start = time.time()
-    npr = np.random.uniform(low=0.0, high=1.0, size=i)
-    stop = time.time()
-    timenp.append(stop - start)
+timerandom(1000, 1000000, 10000)
+timenumpy(1000, 1000000, 10000)
 
-plt.scatter(numbnp, timenp, c="blue", label='numpy')
-plt.legend()
+def mytimeplot(timeran, timenp): # вечером доделаю, не работает пока ничего
+    plt.figure(figsize=(12, 8))
+    plt.scatter(numbran, timeran, c="red", label='random')
+    plt.scatter(numbnp, timenp, c="blue", label='numpy')
+    plt.legend()
 
-## Сделать функцией?
-## наверное для модуля рандома как-то иначе нужно, что я пока не знаю как иначе, чем петлей
+mytimeplot(timeran, timenp)
 
 
 # Task 3. Сделайте функцию для проверки является ли список отсортированным (без использования sorted или sort).
@@ -64,10 +67,9 @@ def is_sorted(data):
     :return: True if the data is sorted and False if not
     """
     for i in range(len(data) - 1):
-    if data[i] > data[i + 1]:
-        return False
-    else:
-        return True
+        if data[i] > data[i + 1]:
+            return False
+    return True
 
 def monkysort(data):
     """
@@ -82,11 +84,11 @@ def monkysort(data):
 monkeymean = [] # average sorting time
 monkeysd = [] # standard deviation of sorting time
 size = []
-progon = 15 # number of repetition for the same data size
+progon = range(15) # number of repetition for the same data size
 for i in range(2, 10000, 50):
     timepr = []
     size.append(i)
-    for j in range(0, progon):
+    for j in progon:
         data = np.random.randint(1, 100000, i)
         start = time.time()
         monkysort(data)
@@ -99,7 +101,7 @@ for i in range(2, 10000, 50):
 
 plt.title("Monkey time")
 plt.scatter(size, monkeymean, c = 'green', label='mean time' )
-plt.scatter(size, monkeysd, c = 'pink', label='sd of time')
+plt.scatter(size, monkeysd, c = 'red', label='sd of time')
 plt.xlabel('sample size')
 plt.ylabel('time')
 plt.legend()
@@ -131,8 +133,8 @@ for i in range(1, n):
         y[i] = y[i - 1] - 1
 # plotting the graph
 plt.title("Random walk ($n = " + str(n) + "$ steps)")
-plt.scatter(x, y, s=1, c = 'green')
-## График прикладывать? Там красота :)
+plt.plot(x, y, s=1, c = 'green')
+# plt.scatter(x, y, s=1, c = 'green')
 
 
 ## Task 5. Сгенерируйте и нарисуйте треугольник Серпинского (15 баллов)
