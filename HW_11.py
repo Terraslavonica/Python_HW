@@ -84,7 +84,7 @@ monkeymean = [] # average sorting time
 monkeysd = [] # standard deviation of sorting time
 size = []
 progon = range(5) # number of repetition for the same data size
-for i in range(2, 15, 2):
+for i in range(2, 11):
     timepr = []
     size.append(i)
     for j in progon:
@@ -98,13 +98,13 @@ for i in range(2, 15, 2):
     monkeymean.append(timemean)
     monkeysd.append(timesd)
 
-plt.title("Monkey time")
+plt.title("Monkey time (mean and sd)")
 plt.scatter(size, monkeymean, c='green', label='mean time')
 plt.errorbar(size, monkeymean, monkeysd, linestyle='None')
 # plt.scatter(size, monkeysd, c='red', label='sd of time')
 plt.xlabel('sample size')
 plt.ylabel('time')
-plt.legend()
+# plt.legend()
 
 
 ## Task 4. Визуализируйте random walk (случайная прогулка, да)) в 2-мерном пространстве, где вы начинаете в (0, 0)
@@ -176,6 +176,52 @@ plt.scatter(x, y, s=1, c = 'purple')
 
 ## Task 7. *Сгенерируйте и нарисуйте коврик Серпинского. Судя по всему придётся вырезать куски квадрата,
 # а не генерировать точками (15 баллов)
+# defining the number of steps
+n = 100000
+# creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
+x = np.zeros(n)
+y = np.zeros(n)
+# Choose 8 attracting points
+A = np.array([1, 1])
+B = np.array([-1, 1])
+C = np.array([-1, -1])
+D = np.array([1, -1])
+E = np.array([(A[0]+B[0])/2, (A[1]+B[1])/2])
+F = np.array([(C[0]+B[0])/2, (C[1]+B[1])/2])
+G = np.array([(C[0]+D[0])/2, (C[1]+D[1])/2])
+H = np.array([(A[0]+D[0])/2, (A[1]+D[1])/2])
+# filling the coordinates with random variables
+for i in range(1, n):
+    val = random.randint(1, 8)
+    if val == 1:
+        x[i] = (x[i - 1] + 2 * A[0]) / 3
+        y[i] = (y[i - 1] + 2 * A[1]) / 3
+    elif val == 2:
+        x[i] = (x[i - 1] + 2 * B[0]) / 3
+        y[i] = (y[i - 1] + 2 * B[1]) / 3
+    elif val == 3:
+        x[i] = (x[i - 1] + 2 * C[0]) / 3
+        y[i] = (y[i - 1] + 2 * C[1]) / 3
+    elif val == 4:
+        x[i] = (x[i - 1] + 2 * D[0]) / 3
+        y[i] = (y[i - 1] + 2 * D[1]) / 3
+    elif val == 5:
+        x[i] = (x[i - 1] + 2 * E[0]) / 3
+        y[i] = (y[i - 1] + 2 * E[1]) / 3
+    elif val == 6:
+        x[i] = (x[i - 1] + 2 * F[0]) / 3
+        y[i] = (y[i - 1] + 2 * F[1]) / 3
+    elif val == 7:
+        x[i] = (x[i - 1] + 2 * G[0]) / 3
+        y[i] = (y[i - 1] + 2 * G[1]) / 3
+    else:
+        x[i] = (x[i - 1] + 2 * H[0]) / 3
+        y[i] = (y[i - 1] + 2 * H[1]) / 3
+# plotting the graph
+plt.title("Sierpinski carpet ($n = " + str(n) + "$ steps)")
+plt.scatter(x, y, s=1, c = 'blue')
+
+## Второй вариант
 # defining the number of steps
 n = 100000
 # creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
