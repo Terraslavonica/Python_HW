@@ -22,35 +22,32 @@ print(ar4)
 # изобразите зависимость времени вычисления от количества вычисляемых чисел для них. Другими словами - по x идёт то,
 # сколько чисел за прогон вы взяли от 0 до 1, а по y - время, которое это заняло для random и numpy (10 баллов)
 
-def timerandom(gofrom, goto, step):
+def timerandom(yoklmn):
     timeran = []
-    numbran = range(gofrom, goto, step)
-    for i in numbran:
+    for i in yoklmn:
         start = time.time()
         for j in range(i):
             random.random()
         stop = time.time()
         timeran.append(stop - start)
-    #return timeran
+    return timeran
 
-def timenumpy(gofrom, goto, step):
+def timenumpy(yoklmn):
     timenp = []
-    numbnp = range(gofrom, goto, step)
-    for i in numbnp:
+    for i in yoklmn:
         start = time.time()
         npr = np.random.uniform(low=0.0, high=1.0, size=i)
         stop = time.time()
         timenp.append(stop - start)
-    #return timenp
+    return timenp
 
 def mytimeplot(gofrom, goto, step):
-    timeran = timerandom(gofrom, goto, step)
-    timenp = timenumpy(gofrom, goto, step)
-    numbran = range(gofrom, goto, step)
-    numbnp = range(gofrom, goto, step)
+    yoklmn = range(gofrom, goto, step)
+    timeran = timerandom(yoklmn)
+    timenp = timenumpy(yoklmn)
     gr = plt.figure(figsize=(12, 8))
-    plt.scatter(numbran, timeran, c="red", label='random')
-    plt.scatter(numbnp, timenp, c="blue", label='numpy')
+    plt.scatter(yoklmn, timeran, c="red", label='random')
+    plt.scatter(yoklmn, timenp, c="blue", label='numpy')
     plt.legend()
     return gr
 
@@ -60,7 +57,7 @@ mytimeplot(1000, 1000000, 10000)
 # Task 3. Сделайте функцию для проверки является ли список отсортированным (без использования sorted или sort).
 # Затем реализуйте monkey sort, а потом визуализируйте следующее: распределение времени работы алгоритма от размера
 # сортируемого списка. То есть по x идёт размер массива, а по y - среднее время нескольких прогонов и их отклонение
-# (или дисперсия) (10 баллов)
+# (или дисперсия)
 
 def is_sorted(data):
     """
@@ -86,7 +83,7 @@ def monkysort(data):
 monkeymean = [] # average sorting time
 monkeysd = [] # standard deviation of sorting time
 size = []
-progon = range(15) # number of repetition for the same data size
+progon = range(5) # number of repetition for the same data size
 for i in range(2, 15, 2):
     timepr = []
     size.append(i)
@@ -102,9 +99,9 @@ for i in range(2, 15, 2):
     monkeysd.append(timesd)
 
 plt.title("Monkey time")
-plt.scatter(size, monkeymean, c = 'green', label='mean time')
+plt.scatter(size, monkeymean, c='green', label='mean time')
 plt.errorbar(size, monkeymean, monkeysd, linestyle='None')
-plt.scatter(size, monkeysd, c = 'red', label='sd of time')
+# plt.scatter(size, monkeysd, c='red', label='sd of time')
 plt.xlabel('sample size')
 plt.ylabel('time')
 plt.legend()
