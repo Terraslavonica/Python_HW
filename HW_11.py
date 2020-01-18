@@ -221,7 +221,7 @@ for i in range(1, n):
 plt.title("Sierpinski carpet ($n = " + str(n) + "$ steps)")
 plt.scatter(x, y, s=1, c = 'blue')
 
-## Второй вариант
+## Второй способ со словарем
 # defining the number of steps
 n = 100000
 # creating two array for containing x and y coordinate of size equals to the number of size and filled up with 0's
@@ -236,33 +236,12 @@ E = np.array([(A[0]+B[0])/2, (A[1]+B[1])/2])
 F = np.array([(C[0]+B[0])/2, (C[1]+B[1])/2])
 G = np.array([(C[0]+D[0])/2, (C[1]+D[1])/2])
 H = np.array([(A[0]+D[0])/2, (A[1]+D[1])/2])
+slovar = {1: A, 2: B, 3: C, 4: D, 5: E, 6: F, 7: G, 8: H}
 # filling the coordinates with random variables
 for i in range(1, n):
     val = random.randint(1, 8)
-    if val == 1:
-        x[i] = (x[i - 1] + 2 * A[0]) / 3
-        y[i] = (y[i - 1] + 2 * A[1]) / 3
-    elif val == 2:
-        x[i] = (x[i - 1] + 2 * B[0]) / 3
-        y[i] = (y[i - 1] + 2 * B[1]) / 3
-    elif val == 3:
-        x[i] = (x[i - 1] + 2 * C[0]) / 3
-        y[i] = (y[i - 1] + 2 * C[1]) / 3
-    elif val == 4:
-        x[i] = (x[i - 1] + 2 * D[0]) / 3
-        y[i] = (y[i - 1] + 2 * D[1]) / 3
-    elif val == 5:
-        x[i] = (x[i - 1] + 2 * E[0]) / 3
-        y[i] = (y[i - 1] + 2 * E[1]) / 3
-    elif val == 6:
-        x[i] = (x[i - 1] + 2 * F[0]) / 3
-        y[i] = (y[i - 1] + 2 * F[1]) / 3
-    elif val == 7:
-        x[i] = (x[i - 1] + 2 * G[0]) / 3
-        y[i] = (y[i - 1] + 2 * G[1]) / 3
-    else:
-        x[i] = (x[i - 1] + 2 * H[0]) / 3
-        y[i] = (y[i - 1] + 2 * H[1]) / 3
+    x[i] = (x[i - 1] + 2 * slovar[val][0]) / 3
+    y[i] = (y[i - 1] + 2 * slovar[val][1]) / 3
 # plotting the graph
 plt.title("Sierpinski carpet ($n = " + str(n) + "$ steps)")
 plt.scatter(x, y, s=1, c = 'blue')
