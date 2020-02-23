@@ -1,5 +1,6 @@
 from itertools import *
 import numpy as np
+from Bio import SeqIO
 
 # Task 1. Напишите по 3 примера использования map и filter на произвольных коллекциях -
 # отпроцессируйте их элементы и отфильтруйте как вам угодно, для визуализации оберните результат в лист
@@ -38,14 +39,31 @@ string = [-1, '', 0, 'privet', 1, ' ', 0, '!', 0, '0', 1, 0, -1] #3
 my_result = filter(None, string)
 list(my_result)
 
+
 # Task 2. Напишите генератор, осуществляющий считывание фасты и возвращающий по 1-ой оттранслированной последовательности
 # input: путь до фасты, таблица кодонов - 'Standard' по умолчанию
-# output: # протеиновый Seq
+# output: протеиновый Seq
+
+def transseq(fromfile, table = 1):
+    prot = []
+    for record in SeqIO.parse(fromfile, "fasta"):
+        coding_dna = record.seq
+        prot.append(coding_dna.translate(table=table))
+    yield prot
+
+# Надеюсь, это то, что нужно...
+transseq('seqs.fasta')
+# <generator object transseq at 0x000001D42053A740>
+list(transseq('seqs.fasta'))
+# оч длинные там белки получаются
+
+transseq("testHW12.fasta")
+# <generator object transseq at 0x000001D42053A740>
+list(transseq("testHW12.fasta")) # тут "белки" покороче
+# [[Seq('MNHDF', ExtendedIUPACProtein()), Seq('MNHDFQAL', ExtendedIUPACProtein()), Seq('MNHXXX', ExtendedIUPACProtein()), Seq('MNHDFQAKKKKKK', ExtendedIUPACProtein())]]
 
 
-
-
-# Сгенерируйте 52-карточную колоду (состоящую из кортежей типа (ранг, масть) с помощью приблуд из itertools -
+# Task 3. Сгенерируйте 52-карточную колоду (состоящую из кортежей типа (ранг, масть) с помощью приблуд из itertools -
 # в вашем распоряжении iterable с рангами (2..10, J..A) и мастями (H, C, S, D)
 cards = list(product(("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "A", "K", "Q"), ("H", "C", "S", "D"))) # карты по порядку
 
@@ -56,7 +74,8 @@ for i in a:
     carddeck.append(cards[i])
 print(carddeck) # вот)
 
-# Сделайте функцию-генератор, генерирующую все ДНКовые последовательности до длины n (аккуратно, не вызывайте её с n > 8)
+
+# Task 4. Сделайте функцию-генератор, генерирующую все ДНКовые последовательности до длины n (аккуратно, не вызывайте её с n > 8)
 # list(generate(2))
 # ['A', 'T', 'G', 'C', 'AA', 'AT', 'AG', 'AC', 'TA', 'TT', 'TG', 'TC',
 # 'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']
