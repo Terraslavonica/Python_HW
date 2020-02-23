@@ -1,6 +1,5 @@
 from itertools import *
 import numpy as np
-import random
 
 # Task 1. Напишите по 3 примера использования map и filter на произвольных коллекциях -
 # отпроцессируйте их элементы и отфильтруйте как вам угодно, для визуализации оберните результат в лист
@@ -17,7 +16,7 @@ num1 = range(1, 10) #3
 num2 = range(100, 200)
 res = map(lambda x, y: y - x, num1, num2)
 list(res)
-# [99, 99, 99, 99, 99, 99, 99, 99, 99] Почему не заругался? Его не волнует, что в num2 есть еще значения?
+# [99, 99, 99, 99, 99, 99, 99, 99, 99] Не заругался. Его не волнует, что в num2 есть еще значения?
 
 # filter
 stroka = ['privet','','poka','dobroe ytro','!', ' ', ''] #1
@@ -49,7 +48,8 @@ list(my_result)
 # Сгенерируйте 52-карточную колоду (состоящую из кортежей типа (ранг, масть) с помощью приблуд из itertools -
 # в вашем распоряжении iterable с рангами (2..10, J..A) и мастями (H, C, S, D)
 cards = list(product(("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "A", "K", "Q"), ("H", "C", "S", "D"))) # карты по порядку
-# нужно генерить колоду рандомно??
+
+# Сгенерила колоду рандомно
 carddeck = []
 a = np.random.choice(range(0, 52), 52)
 for i in a:
@@ -60,3 +60,22 @@ print(carddeck) # вот)
 # list(generate(2))
 # ['A', 'T', 'G', 'C', 'AA', 'AT', 'AG', 'AC', 'TA', 'TT', 'TG', 'TC',
 # 'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']
+
+def generate(n):
+    '''
+    Function generating all DNA sequences up to length n
+    :param n: int - the maximum length of DNA sequence
+    :return: generator of sequences
+    '''
+    nucleotides = ['A', 'T', 'G', 'C']
+    iterable = []
+    bl = ''
+    for i in range(1, n+1):
+        a = list(product(nucleotides, repeat=i))
+        b = list(map(lambda x: bl.join(x), a))
+        for k in b:
+            iterable.append(k)
+    return chain(iterable)
+
+list(generate(3))
+list(generate(8))
