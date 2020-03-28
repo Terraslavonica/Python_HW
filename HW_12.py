@@ -67,6 +67,18 @@ list(transseq("testHW12.fasta")) # тут "белки" покороче
 # в вашем распоряжении iterable с рангами (2..10, J..A) и мастями (H, C, S, D)
 cards = list(product(("2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "A", "K", "Q"), ("H", "C", "S", "D"))) # карты по порядку
 
+nominal = list()
+guys = ("J", "A", "K", "Q")
+for i in (range(2, 11)):
+    nominal.append(str(i))
+for j in guys:
+    nominal.append(j)
+cards = list(product(nominal, ("H", "C", "S", "D"))) # карты по порядку 2
+
+guys = ("J", "A", "K", "Q")
+cards = list(product((chain((str(x) for x in range(2, 11)), guys)), ("H", "C", "S", "D"))) # карты по порядку 3
+
+
 # Сгенерила колоду рандомно
 carddeck = []
 a = np.random.choice(range(0, 52), 52)
