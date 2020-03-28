@@ -90,11 +90,12 @@ def generate(n):
     iterable = []
     bl = ''
     for i in range(1, n+1):
-        a = list(product(nucleotides, repeat=i))
-        b = list(map(lambda x: bl.join(x), a))
-        for k in b:
+        a = map(lambda x: bl.join(x), product(nucleotides, repeat=i))
+        for k in a:
             iterable.append(k)
-    return chain(iterable)
+    yield iterable
 
+list(generate(1))
+list(generate(2))
 list(generate(3))
 list(generate(8))
