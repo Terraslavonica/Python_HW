@@ -1,7 +1,8 @@
 from Bio.Alphabet import generic_rna
 from Bio.Seq import Seq
 from numbers import Number
-
+from Bio import SeqIO
+import matplotlib.pyplot as plt
 
 # Tesk 1. Сделайте небольшой класс, описывающий какую-то сущность на ваш выбор (организм/тип данных/что-то ещё).
 # В классе должен быть конструктор и пара методов (10 баллов)
@@ -126,3 +127,81 @@ print(f) # PositiveSet({'m', 3, 'a', 'y'}) # как я поняла, так за
 # переопределение метода для вывода информации при принте (достаточно текста с указанием путя к файлу)
 # выполнение всех реализованных методов по подсчёту метрик
 # можно придумать дополнительные метрики и реализовать их (5 * число_методов)
+
+class FastaStat:
+    def __init__(self, inp):
+        """
+        Way to fasta
+        :param inp: the way to fasta file
+        """
+        self.way = inp
+
+    def seqnumber(self):
+        """
+        Count the sequence number in fasta file
+        :return: number of sequens
+        """
+        b = str(self.way)
+        seqn = len(list(SeqIO.parse(b, "fasta")))
+        return seqn
+
+    def gcpersent(self):
+        b = str(self.way)
+        seqlen = []
+        gclen = []
+        for record in SeqIO.parse(b, "fasta"):
+            string = record.seq
+            seqlen.append(len(string))
+            gc = string.count("C") + string.count("G")
+            gclen.append(gc)
+        N = sum(seqlen)
+        n = sum(gclen)
+        gc = round((n / N) * 100, 2)
+        otvet = str('gc% = {}'.format(gc))
+        return otvet
+
+    def lengist(self):
+        """
+        Function that receives path to fasta, and shows the distribution of the lengths of sequences in it
+        :return: histogram of the distribution of the lengths of sequences in fasta
+        """
+        b = str(self.way)
+        dlinyi = []
+        for record in SeqIO.parse(b, "fasta"):
+            dlinyi.append(len(record.seq))
+        gr = plt.hist(dlinyi, bins=40)
+        plt.title('distribution of length')
+        plt.xlabel('length')
+        plt.ylabel('number')
+        return gr
+
+    def fourmers(self):
+        b = str(self.way)
+        fourm = []
+        for record in SeqIO.parse(b, "fasta"):
+            string = record.seq
+            for i in range(0, len(string) - 3):
+                fourm.append(string[i:i + 4])
+        fourdict = {}
+        for element in fourm:
+            fourdict[element] = fourdict.get(element, 0) + 1
+        freq = []
+        for value in fourdict.values():
+            freq.append(value)
+        four = plt.hist(freq, bins=70)
+        plt.title('distribution of 4-mers')
+        plt.xlabel('frequency')
+        plt.ylabel('number of 4-mers')
+        return four
+
+    def __str__(self):
+        return (f'It is my awesome fasta file \'{self.way}\'')
+
+
+a = FastaStat("seqs.fasta")
+a.way # seqs.fasta
+a.seqnumber()
+a.gcpersent()
+print(a) # It is my awesome fasta file 'seqs.fasta'
+a.lengist()
+a.fourmers()
