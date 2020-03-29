@@ -203,8 +203,7 @@ class FastaStat:
         print(self.seqnumber())
         print(self.gcpersent())
         self.lengist()
-        self.fourmers()
-        #return fig1, fig2, chislo, gcsostav
+        self.fourmers() # скажи мне, как правильно :(((((((((((((((((((((((((((
 
 
 a = FastaStat("seqs.fasta")
