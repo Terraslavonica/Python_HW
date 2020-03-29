@@ -197,6 +197,13 @@ class FastaStat:
     def __str__(self):
         return (f'It is my awesome fasta file \'{self.way}\'')
 
+    def all(self):
+        chislo = self.seqnumber()
+        gcsostav = self. gcpersent()
+        fig1 = self.lengist()
+        fig2 = self.fourmers()
+        return fig1, fig2, chislo, gcsostav
+
 
 a = FastaStat("seqs.fasta")
 a.way # seqs.fasta
@@ -205,3 +212,4 @@ a.gcpersent()
 print(a) # It is my awesome fasta file 'seqs.fasta'
 a.lengist()
 a.fourmers()
+a.all()
