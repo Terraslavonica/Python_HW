@@ -169,11 +169,12 @@ class FastaStat:
         dlinyi = []
         for record in SeqIO.parse(b, "fasta"):
             dlinyi.append(len(record.seq))
-        gr = plt.hist(dlinyi, bins=40)
+        plt.hist(dlinyi, bins=40)
         plt.title('distribution of length')
         plt.xlabel('length')
         plt.ylabel('number')
-        return gr
+        plt.show()
+        #return gr
 
     def fourmers(self):
         b = str(self.way)
@@ -188,21 +189,22 @@ class FastaStat:
         freq = []
         for value in fourdict.values():
             freq.append(value)
-        four = plt.hist(freq, bins=70)
+        plt.hist(freq, bins=70)
         plt.title('distribution of 4-mers')
         plt.xlabel('frequency')
         plt.ylabel('number of 4-mers')
-        return four
+        plt.show()
+        #return four
 
     def __str__(self):
         return (f'It is my awesome fasta file \'{self.way}\'')
 
     def all(self):
-        chislo = self.seqnumber()
-        gcsostav = self. gcpersent()
-        fig1 = self.lengist()
-        fig2 = self.fourmers()
-        return fig1, fig2, chislo, gcsostav
+        print(self.seqnumber())
+        print(self.gcpersent())
+        self.lengist()
+        self.fourmers()
+        #return fig1, fig2, chislo, gcsostav
 
 
 a = FastaStat("seqs.fasta")
