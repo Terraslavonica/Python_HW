@@ -1,4 +1,5 @@
 import re
+import matplotlib.pyplot as plt
 
 ## В этих заданиях нужно пользоваться только регэкспами (без питоновских сплитов и других методов)
 
@@ -47,6 +48,47 @@ with a certain amount of real sympathy, too), "I know. There was once a time!', 
 '''
 
 ## 4 А теперь построим гистограмму распределения длин уникальных слов (без учёта регистра, длина от 1) в тексте (15 баллов)
+
+def flatten(List):
+    """
+    Function which make the List flat
+    :param List: list - your list
+    :return: flat List
+    """
+    if List == []:
+        return List
+    if type(List[0]) is list:
+        return flatten(List[0]) + flatten(List[1:])
+    return List[:1] + flatten(List[1:])
+
+pat4 = re.compile(r'[a-zA-Z]+')
+ans = []
+with open('2430AD.txt', 'r') as story:
+    for i in story:
+        if pat4.findall(i):
+            ans.append(pat4.findall(i))
+
+goodans = flatten(ans)
+
+ans_low = []
+for i in goodans:
+    ans_low.append(i.lower()) # список всех слов без учета регистра
+
+len(ans_low) # 2942
+
+wordset = set(ans_low) # сет из слов, т.е. в нем только уникальные слова
+len(wordset) # 919
+
+wordlen = []
+for elem in wordset:
+    wordlen.append(len(elem))
+
+plt.hist(wordlen, bins=30)
+plt.title("distribution of words' lenght")
+plt.xlabel('lenght')
+plt.ylabel('number of words with that lenght')
+plt.show()
+# очень красиво :))))
 
 
 
