@@ -37,6 +37,15 @@ with open('2430AD.txt', 'r') as story:
         if pat3.findall(i):
             print(pat3.findall(i))
 
+'''
+['Yes!']
+['Literally!']
+['Alvarez had heard that before. He said, with as much sympathy as he could pump into his voice (and, to his surprise, 
+with a certain amount of real sympathy, too), "I know. There was once a time!', 'Centuries ago!']
+['Think, Cranwitz!']
+['If we succeed!']
+'''
+
 ## 4 А теперь построим гистограмму распределения длин уникальных слов (без учёта регистра, длина от 1) в тексте (15 баллов)
 
 
@@ -45,3 +54,4 @@ with open('2430AD.txt', 'r') as story:
 pattern = re.compile(r'[a-zA-Z0-9_\.-]+@[a-z\.]*\.[a-z]*')
 emails = str('Terra8908@yandex.ru, e.u.yakovleva@gmail.com, akjd-470@mail.eu, eyakovleva@econ.msu.ru, Hellow world')
 pattern.findall(emails)
+# ['Terra8908@yandex.ru', 'e.u.yakovleva@gmail.com', 'akjd-470@mail.eu', 'eyakovleva@econ.msu.ru']
