@@ -61,7 +61,7 @@ def flatten(List):
         return flatten(List[0]) + flatten(List[1:])
     return List[:1] + flatten(List[1:])
 
-pat4 = re.compile(r'[a-zA-Z]+')
+pat4 = re.compile(r'[a-zA-Z\']+')
 ans = []
 with open('2430AD.txt', 'r') as story:
     for i in story:
@@ -74,10 +74,10 @@ ans_low = []
 for i in goodans:
     ans_low.append(i.lower()) # список всех слов без учета регистра
 
-len(ans_low) # 2942
+len(ans_low) # 2890
 
 wordset = set(ans_low) # сет из слов, т.е. в нем только уникальные слова
-len(wordset) # 919
+len(wordset) # 933
 
 wordlen = []
 for elem in wordset:
