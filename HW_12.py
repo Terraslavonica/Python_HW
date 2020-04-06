@@ -103,11 +103,12 @@ def generate(n):
     bl = ''
     for i in range(1, n+1):
         a = map(lambda x: bl.join(x), product(nucleotides, repeat=i))
-        for k in a:
-            iterable.append(k)
-    yield iterable
+        yield list(a)
 
-list(generate(1))
-list(generate(2))
-list(generate(3))
-list(generate(8))
+generate(2) # <generator object generate at 0x0000024F18B056D0>
+list(generate(2)) # [['A', 'T', 'G', 'C'], ['AA', 'AT', 'AG', 'AC', 'TA', 'TT',
+                # 'TG', 'TC', 'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']]
+
+for i in generate(2):
+    print(i) # ['A', 'T', 'G', 'C']
+            # ['AA', 'AT', 'AG', 'AC', 'TA', 'TT', 'TG', 'TC', 'GA', 'GT', 'GG', 'GC', 'CA', 'CT', 'CG', 'CC']
