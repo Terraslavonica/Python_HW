@@ -21,14 +21,14 @@ with open('2430AD.txt', 'r') as file:
 
 
 ## 3 Теперь выберите из текста все слова, в которых есть буква a, регистр при этом не важен (5 баллов)
-pat2 = re.compile(r'[a-zA-Z]*a[a-zA-Z]*', re.I)
+pat2 = re.compile(r'\w*a\w*', re.I)
 with open('2430AD.txt', 'r') as file:
     for string in file:
         if pat2.findall(string):
             print(pat2.findall(string))
 
 ## 4 Далее извлеките все восклицательные предложения (10 баллов)
-pat3 = re.compile(r'[A-Z].+?!')
+pat3 = re.compile(r'[A-Z].[^.]+?!')
 with open('2430AD.txt', 'r') as story:
     for i in story:
         if pat3.findall(i):
@@ -37,37 +37,22 @@ with open('2430AD.txt', 'r') as story:
 '''
 ['Yes!']
 ['Literally!']
-['Alvarez had heard that before. He said, with as much sympathy as he could pump into his voice (and, to his surprise, 
-with a certain amount of real sympathy, too), "I know. There was once a time!', 'Centuries ago!']
+['There was once a time!', 'Centuries ago!']
 ['Think, Cranwitz!']
 ['If we succeed!']
 '''
 
 ## 5 А теперь построим гистограмму распределения длин уникальных слов (без учёта регистра, длина от 1) в тексте (15 баллов)
 
-def flatten(List):
-    """
-    Function which make the List flat
-    :param List: list - your list
-    :return: flat List
-    """
-    if List == []:
-        return List
-    if type(List[0]) is list:
-        return flatten(List[0]) + flatten(List[1:])
-    return List[:1] + flatten(List[1:])
-
 pat4 = re.compile(r'[a-zA-Z\']+')
 ans = []
 with open('2430AD.txt', 'r') as story:
     for i in story:
         if pat4.findall(i):
-            ans.append(pat4.findall(i))
-
-goodans = flatten(ans)
+            ans.extend(pat4.findall(i))
 
 ans_low = []
-for i in goodans:
+for i in ans:
     ans_low.append(i.lower()) # список всех слов без учета регистра
 
 len(ans_low) # 2890
