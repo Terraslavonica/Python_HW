@@ -43,12 +43,10 @@ with open('2430AD.txt', 'r') as story:
 '''
 
 ## 5 А теперь построим гистограмму распределения длин уникальных слов (без учёта регистра, длина от 1) в тексте (15 баллов)
-
 pat4 = re.compile(r'[a-zA-Z\']+')
 ans = []
 with open('2430AD.txt', 'r') as story:
     for i in story:
-        if pat4.findall(i):
             ans.extend(pat4.findall(i))
 
 ans_low = []
