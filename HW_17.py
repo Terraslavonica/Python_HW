@@ -1,6 +1,81 @@
 import sqlite3
 import pandas as pd
 
+
+# Task 1 Variant 0
+# Create connection
+connection = sqlite3.connect('learners.db')
+
+connection.execute('DROP TABLE IF EXISTS courses')
+connection.execute('DROP TABLE IF EXISTS learners')
+connection.execute('DROP TABLE IF EXISTS attendance')
+
+
+connection.execute('''CREATE TABLE IF NOT EXISTS learners (
+        learner_id INTEGER PRIMARY KEY,
+        first_name TEXT,
+        last_name TEXT,
+        sex INTEGER,
+        UNIQUE (first_name, last_name, sex)              
+        )''')
+
+connection.execute('''CREATE TABLE IF NOT EXISTS courses (
+    course_id INTEGER PRIMARY KEY,
+    course TEXT UNIQUE,
+    prep TEXT
+    )''')
+
+connection.execute('''CREATE TABLE IF NOT EXISTS attendance (
+    attendance_id INTEGER PRIMARY KEY,
+    course_id INTEGER REFERENCES courses (course_id) ON UPDATE CASCADE ON DELETE CASCADE, 
+    learner_id INTEGER REFERENCES learners (learner_id) ON UPDATE CASCADE ON DELETE CASCADE
+    )''') # тут отличие от следующего варианта
+
+
+query = '''INSERT INTO learners (first_name, last_name, sex) VALUES (?, ?, ?)'''
+
+learners = [('Dima', 'Biba', 0), ('Shamil', 'Urazbakhtin', 0), ('Loli', 'Alekseeva', 1),
+            ('Katya', 'Yakovleva', 1), ('Olya', 'Mazur', 1), ('Masha', 'Volkova', 1)]
+connection.executemany(query, learners)
+
+query2 = "INSERT INTO courses (course, prep) VALUES (?, ?)"
+connection.executemany(query2, (['python', 'Sasha'], ['prak', 'Nadya'], ['ML', 'Lavrentiy'], ['NGS', 'Ura']))
+
+query3 = "INSERT INTO attendance (course_id, learner_id) VALUES (?, ?)"
+connection.executemany(query3, ([1, 1], [1, 2], [1, 3], [1, 4], [1, 5], [1, 6], [2, 1], [2, 3], [2, 4], [2, 3],
+                                [3, 1], [3, 3], [3, 4], [4, 1], [4, 2], [4, 3], [4, 4], [4, 5], [4, 6]))
+
+query4 = '''SELECT * FROM attendance
+    JOIN learners on attendance.learner_id = learners.learner_id
+    JOIN courses on courses.course_id = attendance.course_id'''
+
+res = connection.execute(query4)
+
+print(res.fetchall())
+
+for row in res.fetchall():
+    print(row)
+
+update_query = '''UPDATE learners SET last_name = "Superman" where learner_id = 1''' # заменим фамилию одному из студентов
+connection.execute(update_query)
+
+update_query_many = """UPDATE courses SET course = ? where course_id = ?"""
+records = [('python-2', 1), ('prak-2', 2)] # продолжающиеся курсы приобретают 2 в названии
+connection.executemany(update_query_many, records)
+
+update_query_prep = """UPDATE courses SET prep = 'Misha' where course_id = 2"""
+connection.execute(update_query_prep)
+
+delete_query = """DELETE from learners where learner_id = 6""" # Маша ушла)
+connection.execute(delete_query)
+
+connection.execute('UPDATE learners SET learner_id = 100 WHERE first_name = "Dima"')
+
+connection.commit()
+connection.close()
+
+
+
 # Task 1. Прочитайте о следующих командах и попробуйте их - UPDATE, DELETE, CASCADE
 # не опняла, что значит попробовать? На табличке какой-нибудь?
 # Create connection
