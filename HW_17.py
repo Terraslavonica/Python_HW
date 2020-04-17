@@ -2,7 +2,7 @@ import sqlite3
 import pandas as pd
 
 
-# Task 1 Variant 0
+# Task 1 Variant 0 CASCADE doesnt work
 # Create connection
 connection = sqlite3.connect('learners.db')
 
