@@ -3,11 +3,13 @@ from Bio.Seq import Seq
 from Bio import pairwise2
 from Bio.pairwise2 import format_alignment
 from Bio.SeqRecord import SeqRecord
+from Bio import SeqIO
+
 
 # Task 1. Напишите наивный сборщик
 
 def naivalgn(fastq_input, fasta_output, threshold=6):
-    seqs = list(SeqIO.parse(fastq_input, 'fastq'))
+    seqs = list(SeqIO.parse(fastq_input, 'fasta'))
     new_seqs = seqs
     threshold = threshold
     score = {0:100}
@@ -45,4 +47,4 @@ def naivalgn(fastq_input, fasta_output, threshold=6):
                 new_seqs.append(temp)
     SeqIO.write(new_seqs, fasta_output, 'fasta')
 
-naivalgn('sample.fastq', 'output.fasta', 7)
+naivalgn('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
