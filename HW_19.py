@@ -8,8 +8,8 @@ from Bio import SeqIO
 
 # Task 1. Напишите наивный сборщик
 
-def naiveassembler(fastq_input, fasta_output, threshold=6):
-    seqs = list(SeqIO.parse(fastq_input, 'fasta'))
+def naiveassembler(reads_input, fasta_output, threshold=6):
+    seqs = list(SeqIO.parse(reads_input, 'fasta'))
     new_seqs = seqs
     threshold = threshold
     score = {0:100}
@@ -48,5 +48,6 @@ def naiveassembler(fastq_input, fasta_output, threshold=6):
     SeqIO.write(new_seqs, fasta_output, 'fasta')
 
 naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
+
 
 
