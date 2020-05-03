@@ -16,7 +16,9 @@ def naiveassembler(reads_input, fasta_output, threshold=6):
     new_seqs = seqs
     threshold = threshold
     score = {0: 100}
-    while (len(new_seqs) != 1) and (max(score.values()) >= threshold):
+    iter = 0
+    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < 100:
+        iter += 1
         score = {}
         a = new_seqs[0].seq
         for j in range(1, len(new_seqs)):
@@ -52,6 +54,7 @@ def naiveassembler(reads_input, fasta_output, threshold=6):
 
 
 naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
+naiveassembler('unknown.fasta', 'unknown_ass_naiv.txt', 20)
 # Пишет в файл следующее
 # ><unknown id> <unknown description>
 # ATGTAGCTCC
@@ -72,6 +75,7 @@ def kmersep(reads_input, k=10):
     return kmers
 
 kmers = kmersep('ATGTAGCTCC.fasta', 4)
+unknown_kmers = kmersep('unknown.fasta', 40)
 
 def construct_de_bruijn_graph(kmers):
     # Construct de bruijn graph edges
@@ -88,8 +92,8 @@ def construct_de_bruijn_graph(kmers):
     node_coverage = {}
     for node in de_bruijn_graph_nodes:
         node_coverage[node] = node_coverage.get(node, 0) + 1
-    de_bruijn_graph_nodes = list(node_coverage.keys())
-
+    de_bruijn_graph_nodes = list(node_coverage.keys()) # на этом этапе уичтожаются лишние узлы, это по сути эквивалентно
+                                             # дедупликации, хотя можно написать ее и отдельно, может быть допишу
     # Construct de bruijn graph edge nodes corresponding to k-1 mers
     m = k - 1
     de_bruijn_graph = {}
@@ -106,6 +110,10 @@ def construct_de_bruijn_graph(kmers):
     return de_bruijn_graph, edges_coverage, node_coverage
 
 de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)
+de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(unknown_kmers)
+for i in de_bruijn_graph.items():
+    print(i)
+len(de_bruijn_graph)
 
 # Проверка числа компонент связности в графе
 def search(vertex, graph, visited):
@@ -153,13 +161,14 @@ def graph_way(de_bruijn_graph, node_coverage):
         order[i] = 0
     # Ищем по минимальному покрытию стартовый и финальный узел и присваиваем им соответствующие порялки
     edges_coverage_sorted = sorted(node_coverage.items(), key=operator.itemgetter(1))
-    cov_min = edges_coverage_sorted[0][1]
-    for i in range(len(edges_coverage_sorted)):
-        if edges_coverage_sorted[i][1] == cov_min: # и стартовый и финальный узлы имеют минимальное покрытие
-            if de_bruijn_graph.get(edges_coverage_sorted[i][0]) != None: # стартовый  узел есть в графе среди ключей (из него выходит стрелка)
-                potential_start_node = edges_coverage_sorted[i][0]
-            else:
-                potential_finish_node = edges_coverage_sorted[i][0] # финального узла нет в графе среди ключей (из него не выходит стрелка)
+    # и стартовый и финальный узлы имеют минимальное покрытие
+    potential_start_node = str()
+    potential_finish_node = str()
+    for i in range(0,2):
+        if de_bruijn_graph.get(edges_coverage_sorted[i][0]) != None: # стартовый  узел есть в графе среди ключей (из него выходит стрелка)
+            potential_start_node = edges_coverage_sorted[i][0]
+        else:
+            potential_finish_node = edges_coverage_sorted[i][0] # финального узла нет в графе среди ключей (из него не выходит стрелка)
     nodes_number = len(node_coverage.keys())
     # присваиваем порядки первому и последнему узлу
     order[potential_start_node] = 1
@@ -181,7 +190,7 @@ graph_way(de_bruijn_graph, node_coverage)
 # Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
 
 # Соберем сборщик из функций выше
-def de_bruijn_assembler(reads_input, k=10):
+def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
     reads_input = reads_input
     k = k
     kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
@@ -196,10 +205,13 @@ def de_bruijn_assembler(reads_input, k=10):
         print("Мы в такое не умеем еще!")
     else:
         final_seq = graph_way(de_bruijn_graph, node_coverage)
+    # SeqIO.write(final_seq, fasta_output, 'fasta')
+    with open(fasta_output, 'w') as file:
+        file.write(f'{final_seq}')
     return final_seq
 
 de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
-
+de_bruijn_assembler('unknown.fasta', 40, 'unknown_ass.txt')
 
 
 ## Task 3. Сравнить результаты работы сборщиков
@@ -212,4 +224,6 @@ my_graph = []
 for i in de_bruijn_graph.items(): # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
     my_graph.append(i)
 G.add_edges_from(my_graph)
+nx.draw(G)
 nx.draw(G, with_labels=True)
+
