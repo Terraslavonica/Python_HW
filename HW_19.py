@@ -6,6 +6,7 @@ from Bio.SeqRecord import SeqRecord
 from Bio import SeqIO
 from graphviz import Graph
 import networkx as nx
+import operator
 
 
 # Task 1. Напишите наивный сборщик
@@ -51,7 +52,9 @@ def naiveassembler(reads_input, fasta_output, threshold=6):
 
 
 naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
-
+# Пишет в файл следующее
+# ><unknown id> <unknown description>
+# ATGTAGCTCC
 
 
 
@@ -96,25 +99,102 @@ def construct_de_bruijn_graph(kmers):
     edges_coverage = {}
     for k1mer1 in de_bruijn_graph_nodes:
         for k1mer2 in de_bruijn_graph_nodes:
-            if k1mer1[1:m] == k1mer2[0:m - 1]:
+            if k1mer1[1:m] == k1mer2[0:m-1]:
                 edge = k1mer1 + k1mer2[-1]
                 edges_coverage[edge] = (node_coverage[k1mer1] + node_coverage[k1mer2]) / 2
                 if de_bruijn_graph.get(k1mer1) == None:
                     de_bruijn_graph[k1mer1] = k1mer2
                 else:
                     de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
-    return de_bruijn_graph, edges_coverage
+    return de_bruijn_graph, edges_coverage, node_coverage
 
-res = construct_de_bruijn_graph(b)
-res[0]
-res[1]
+de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(b)
 
-# Graph visualization
+# Проверка числа компонент связности в графе
+def search(vertex, graph, visited):
+    """
+    Function helper to move in graph
+    :param vertex: hashable - current vertex
+    :param graph: dict - "adjacency dict" in a form {vertex: [neighbours...]}
+    :param visited: dict - dict with visited vertices in a form {vertex: True/False}
+    :return:
+    """
+    # Mark vertex as visited
+    visited[vertex] = True
+
+    # Go to other vertex, adjacent to current, if they weren't visited before
+    for neighbour in graph[vertex]:
+        if not visited[neighbour]:
+            search(neighbour, graph, visited)
+
+
+def dfs(graph):
+    """
+    Function to apply depth-first search to a graph
+    :param graph: dict - "adjacency dict" in a form {vertex: [neighbours...]}
+    :return:
+    """
+    # Create dict of visited vertices
+    visited = {v: False for v in graph}
+
+    # Visit all reachable vertices from vertex for all vertices
+    q = 0
+    for v in graph:
+        if not visited[v]:
+            q += 1
+            search(v, graph, visited)
+    return q
+
+dfs(G) # 1
+
+# Случай сборки для 1 компонента связности
+def graph_way(de_bruijn_graph, node_coverage):
+    de_bruijn_graph = de_bruijn_graph
+    node_coverage = node_coverage
+
+    # Выстраиваем узлы в правильном порядке
+    # Пока присваиваем всем узлам нулевой порядок
+    order = {}
+    for i in de_bruijn_graph.keys():
+        order[i] = 0
+    # Ищем по минимальному покрытию стартовый и финальный узел и присваиваем им соответствующие порялки
+    edges_coverage_sorted = sorted(node_coverage.items(), key=operator.itemgetter(1))
+    cov_min = edges_coverage_sorted[0][1]
+    for i in range(len(edges_coverage_sorted)):
+        if edges_coverage_sorted[i][1] == cov_min: # и стартовый и финальный узлы имеют минимальное покрытие
+            if de_bruijn_graph.get(edges_coverage_sorted[i][0]) != None: # стартовый  узел есть в графе среди ключей (из него выходит стрелка)
+                potential_start_node = edges_coverage_sorted[i][0]
+            else:
+                potential_finish_node = edges_coverage_sorted[i][0] # финального узла нет в графе среди ключей (из него не выходит стрелка)
+    nodes_number = len(node_coverage.keys())
+    # присваиваем порядки первому и последнему узлу
+    order[potential_start_node] = 1
+    order[potential_finish_node] = nodes_number
+    # присвиваем порядки всем остальным узлам
+    while min(order.values()) == 0:
+        for i in de_bruijn_graph.keys():
+            if order[i] != 0:
+                his_val = de_bruijn_graph[i]
+                order[his_val] = order[i]+1
+    # собираем последовательность по порядку узлов
+    order_sorted = sorted(order.items(), key=operator.itemgetter(1))
+    final_seq = order_sorted[0][0]
+    for k in range(1, len(order_sorted)):
+        final_seq += order_sorted[k][0][-1]
+    return final_seq
+
+graph_way(de_bruijn_graph, node_coverage)
+# Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
+
+
+## Task 3. Сравнить результаты работы сборщиков
+# Собирают одинаково хорошо простейший случай
+
+
+# Task 4. Graph visualization
 G = nx.Graph()
 my_graph = []
-for i in res[0].items():
+for i in de_bruijn_graph.items(): # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
     my_graph.append(i)
 G.add_edges_from(my_graph)
 nx.draw(G, with_labels=True)
-
-
