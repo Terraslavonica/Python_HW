@@ -17,7 +17,7 @@ def naiveassembler(reads_input, fasta_output, threshold=6):
     threshold = threshold
     score = {0: 100}
     iter = 0
-    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < 100:
+    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < 10:
         iter += 1
         score = {}
         a = new_seqs[0].seq
@@ -74,10 +74,11 @@ def kmersep(reads_input, k=10):
             kmers.append(a[i:i + k])
     return kmers
 
-kmers = kmersep('ATGTAGCTCC.fasta', 4)
-unknown_kmers = kmersep('unknown.fasta', 40)
+# kmers = kmersep('ATGTAGCTCC.fasta', 4)
+# unknown_kmers = kmersep('unknown.fasta', 4)
 
 def construct_de_bruijn_graph(kmers):
+    flag = 0 # если 0, то петель в графе нет, если 1, то в графе петля, дальше сборка невозможна
     # Construct de bruijn graph edges
     de_bruin_graph_edges = set()
     for kmer in kmers:
@@ -106,14 +107,12 @@ def construct_de_bruijn_graph(kmers):
                 if de_bruijn_graph.get(k1mer1) == None:
                     de_bruijn_graph[k1mer1] = k1mer2
                 else:
-                    de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
-    return de_bruijn_graph, edges_coverage, node_coverage
+                    flag = 1 #"В графе возникла петля, необходимо выбрать большее k"
+                    # de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
+    return de_bruijn_graph, edges_coverage, node_coverage, flag
 
-de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)
-de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(unknown_kmers)
-for i in de_bruijn_graph.items():
-    print(i)
-len(de_bruijn_graph)
+# de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(kmers)
+# de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(unknown_kmers)
 
 # Проверка числа компонент связности в графе
 def search(vertex, graph, visited):
@@ -150,7 +149,6 @@ def dfs(graph):
             search(v, graph, visited)
     return q
 
-dfs(G) # 1
 
 # Случай сборки для 1 компонента связности
 def graph_way(de_bruijn_graph, node_coverage):
@@ -186,44 +184,56 @@ def graph_way(de_bruijn_graph, node_coverage):
         final_seq += order_sorted[k][0][-1]
     return final_seq
 
-graph_way(de_bruijn_graph, node_coverage)
+# graph_way(de_bruijn_graph, node_coverage)
 # Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
 
 # Соберем сборщик из функций выше
 def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
-    reads_input = reads_input
-    k = k
-    kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
-    de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
+    # Считаем минимальную длину рида, k не должно ее превышать
+    seqs = list(SeqIO.parse('unknown.fasta', 'fasta'))
+    read_lenght = []
+    for s in seqs:
+        read_lenght.append(len(s.seq))
+    min_read_len = min(read_lenght)
+
+    flag = 1
+    k = k - 2 # нужно, чтобы войти в петлю
+    while flag == 1:
+        k = k + 2 # будем прибвлять к k по 2 нуклеотида, пока не получим граф без петель
+        if k <= min_read_len:
+            kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
+            de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
+            if flag == 1:
+                continue
+            else:
+                break
+        else:
+            print("Нельзя собрать, удалите слишком короткие риды") # когда k уже длинее ридов, а в графе все равно петли
     G = nx.Graph()
     my_graph = []
-    for i in de_bruijn_graph.items():  # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
+    for i in de_bruijn_graph.items():
         my_graph.append(i)
     G.add_edges_from(my_graph)
     components = dfs(G)
     if components != 1:
-        print("Мы в такое не умеем еще!")
+        print("В графе больше 1 компоненты. Мы в такое не умеем еще!")
     else:
         final_seq = graph_way(de_bruijn_graph, node_coverage)
     # SeqIO.write(final_seq, fasta_output, 'fasta')
+    if len(de_bruijn_graph.keys()) > 20:                                # Task 4. Graph visualization
+        nx.draw(G) # когда слишком много узлов, узлы не подписывать
+    else:
+        nx.draw(G, with_labels=True) # когда узлов мало, узлы подписывать
     with open(fasta_output, 'w') as file:
         file.write(f'{final_seq}')
-    return final_seq
+    return k, final_seq
 
-de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
-de_bruijn_assembler('unknown.fasta', 40, 'unknown_ass.txt')
+# de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
+# de_bruijn_assembler('unknown.fasta', 6, 'unknown_ass.txt')
+# минимальное k для вируса k=14
 
 
 ## Task 3. Сравнить результаты работы сборщиков
-# Собирают одинаково хорошо простейший случай
 
 
-# Task 4. Graph visualization
-G = nx.Graph()
-my_graph = []
-for i in de_bruijn_graph.items(): # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
-    my_graph.append(i)
-G.add_edges_from(my_graph)
-nx.draw(G)
-nx.draw(G, with_labels=True)
 
