@@ -60,6 +60,27 @@ naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
 
 # Task 2. de Bruijn graph-based assembler
 
+# Засунем все функции ниже в одну функцию
+def de_bruijn_assembler(reads_input, k=10):
+    reads_input = reads_input
+    k = k
+    kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
+    de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
+    G = nx.Graph()
+    my_graph = []
+    for i in de_bruijn_graph.items():  # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
+        my_graph.append(i)
+    G.add_edges_from(my_graph)
+    components = dfs(G)
+    if components != 1:
+        print("Мы в такое не умеем еще!")
+    else:
+        final_seq = graph_way(de_bruijn_graph, node_coverage)
+    return final_seq
+
+de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
+
+
 def kmersep(reads_input, k=10):
     seqs = list(SeqIO.parse(reads_input, 'fasta'))
     k = k
@@ -70,11 +91,8 @@ def kmersep(reads_input, k=10):
             kmers.append(a[i:i + k])
     return kmers
 
+kmers = kmersep('ATGTAGCTCC.fasta', 4)
 
-b = kmersep('ATGTAGCTCC.fasta', 4)
-#
-# for i in b:
-#     print(i)
 
 def construct_de_bruijn_graph(kmers):
     # Construct de bruijn graph edges
@@ -108,7 +126,7 @@ def construct_de_bruijn_graph(kmers):
                     de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
     return de_bruijn_graph, edges_coverage, node_coverage
 
-de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(b)
+de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)
 
 # Проверка числа компонент связности в графе
 def search(vertex, graph, visited):
@@ -149,9 +167,6 @@ dfs(G) # 1
 
 # Случай сборки для 1 компонента связности
 def graph_way(de_bruijn_graph, node_coverage):
-    de_bruijn_graph = de_bruijn_graph
-    node_coverage = node_coverage
-
     # Выстраиваем узлы в правильном порядке
     # Пока присваиваем всем узлам нулевой порядок
     order = {}
@@ -185,6 +200,7 @@ def graph_way(de_bruijn_graph, node_coverage):
 
 graph_way(de_bruijn_graph, node_coverage)
 # Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
+
 
 
 ## Task 3. Сравнить результаты работы сборщиков

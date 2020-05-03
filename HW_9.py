@@ -19,7 +19,7 @@ def fastqtofasta(input, output, lenmin = 50):
             rez.append(i)
         SeqIO.write(rez, output, 'fasta')
 
-fastqtofasta('sample.fastq', 'subsample_2.fasta', 10)
+fastqtofasta('sample.fastq', 'subsample_2.fasta', 5)
 
 # Task 2. Напишите функцию, выполняющую глобальное выравнивание 2-ух последовательностей input путь к фаста файлу
 # с 2-мя последовательностями скор за мэтч скор за мисмэтч скор за гэп, output кортеж из скора и строки выравнивания
