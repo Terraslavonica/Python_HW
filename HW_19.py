@@ -60,27 +60,7 @@ naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
 
 # Task 2. de Bruijn graph-based assembler
 
-# Засунем все функции ниже в одну функцию
-def de_bruijn_assembler(reads_input, k=10):
-    reads_input = reads_input
-    k = k
-    kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
-    de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
-    G = nx.Graph()
-    my_graph = []
-    for i in de_bruijn_graph.items():  # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
-        my_graph.append(i)
-    G.add_edges_from(my_graph)
-    components = dfs(G)
-    if components != 1:
-        print("Мы в такое не умеем еще!")
-    else:
-        final_seq = graph_way(de_bruijn_graph, node_coverage)
-    return final_seq
-
-de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
-
-
+# Разделим риды на k-меры
 def kmersep(reads_input, k=10):
     seqs = list(SeqIO.parse(reads_input, 'fasta'))
     k = k
@@ -92,7 +72,6 @@ def kmersep(reads_input, k=10):
     return kmers
 
 kmers = kmersep('ATGTAGCTCC.fasta', 4)
-
 
 def construct_de_bruijn_graph(kmers):
     # Construct de bruijn graph edges
@@ -200,6 +179,26 @@ def graph_way(de_bruijn_graph, node_coverage):
 
 graph_way(de_bruijn_graph, node_coverage)
 # Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
+
+# Соберем сборщик из функций выше
+def de_bruijn_assembler(reads_input, k=10):
+    reads_input = reads_input
+    k = k
+    kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
+    de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
+    G = nx.Graph()
+    my_graph = []
+    for i in de_bruijn_graph.items():  # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
+        my_graph.append(i)
+    G.add_edges_from(my_graph)
+    components = dfs(G)
+    if components != 1:
+        print("Мы в такое не умеем еще!")
+    else:
+        final_seq = graph_way(de_bruijn_graph, node_coverage)
+    return final_seq
+
+de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
 
 
 
