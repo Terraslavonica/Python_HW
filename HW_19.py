@@ -13,11 +13,12 @@ import operator
 
 def naiveassembler(reads_input, fasta_output, threshold=6):
     seqs = list(SeqIO.parse(reads_input, 'fasta'))
+    threshold_iter = len(seqs)*10
     new_seqs = seqs
     threshold = threshold
     score = {0: 100}
     iter = 0
-    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < 10:
+    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < threshold_iter:
         iter += 1
         score = {}
         a = new_seqs[0].seq
@@ -188,7 +189,7 @@ def graph_way(de_bruijn_graph, node_coverage):
 # Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
 
 # Соберем сборщик из функций выше
-def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
+def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
     # Считаем минимальную длину рида, k не должно ее превышать
     seqs = list(SeqIO.parse('unknown.fasta', 'fasta'))
     read_lenght = []
@@ -216,15 +217,14 @@ def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
     G.add_edges_from(my_graph)
     components = dfs(G)
     if components != 1:
-        print("В графе больше 1 компоненты. Мы в такое не умеем еще!")
+        return "В графе больше 1 компоненты. Мы в такое не умеем еще!"
     else:
         final_seq = graph_way(de_bruijn_graph, node_coverage)
-    # SeqIO.write(final_seq, fasta_output, 'fasta')
     if len(de_bruijn_graph.keys()) > 20:                                # Task 4. Graph visualization
         nx.draw(G) # когда слишком много узлов, узлы не подписывать
     else:
         nx.draw(G, with_labels=True) # когда узлов мало, узлы подписывать
-    with open(fasta_output, 'w') as file:
+    with open(output, 'w') as file:
         file.write(f'{final_seq}')
     return k, final_seq
 
@@ -233,7 +233,11 @@ def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
 # минимальное k для вируса k=14
 
 
+
 ## Task 3. Сравнить результаты работы сборщиков
 
+de_bruijn_assembler('for_assembler_compar.fasta', 3)
+# 'В графе больше 1 компоненты. Мы в такое не умеем еще!'
 
-
+naiveassembler('for_assembler_compar.fasta', 'strange_out.fasta', 3)
+# собрал из 275 ридов 167 контигов :)
