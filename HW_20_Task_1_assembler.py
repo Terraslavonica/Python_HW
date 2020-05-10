@@ -168,10 +168,6 @@ def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
         return "В графе больше 1 компоненты. Мы в такое не умеем еще!"
     else:
         final_seq = graph_way(de_bruijn_graph, node_coverage)
-    if len(de_bruijn_graph.keys()) > 20:                                # Task 4. Graph visualization
-        nx.draw(G) # когда слишком много узлов, узлы не подписывать
-    else:
-        nx.draw(G, with_labels=True) # когда узлов мало, узлы подписывать
     with open(output, 'w') as file:
         file.write(f'{final_seq}')
     return k, final_seq
