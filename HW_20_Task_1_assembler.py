@@ -150,7 +150,7 @@ def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
     while flag == 1:
         k = k + 2 # будем прибвлять к k по 2 нуклеотида, пока не получим граф без петель
         if k <= min_read_len:
-            kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
+            kmers = kmersep(reads_input, k)  # разбиваем все риды на k-меры
             de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
             if flag == 1:
                 continue
