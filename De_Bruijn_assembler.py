@@ -8,60 +8,6 @@ from graphviz import Graph
 import networkx as nx
 import operator
 
-
-# Task 1. Напишите наивный сборщик
-
-def naiveassembler(reads_input, fasta_output, threshold=6):
-    seqs = list(SeqIO.parse(reads_input, 'fasta'))
-    threshold_iter = len(seqs)*10
-    new_seqs = seqs
-    threshold = threshold
-    score = {0: 100}
-    iter = 0
-    while (len(new_seqs) != 1) and (max(score.values()) >= threshold) and iter < threshold_iter:
-        iter += 1
-        score = {}
-        a = new_seqs[0].seq
-        for j in range(1, len(new_seqs)):
-            b = new_seqs[j].seq
-            aln = pairwise2.align.localms(a, b, 1, -1, -1, -1)
-            if aln:
-                aln = aln[0]
-                score[j] = aln[2]
-            else:
-                score[j] = 0
-        for k in sorted(score, key=score.get, reverse=True):
-            if score[k] >= threshold:
-                pair_pos = k
-                c = new_seqs[pair_pos].seq
-                aln_true = pairwise2.align.localms(a, c, 1, -1, -1, -1)[0]
-                fragment = aln_true[0][aln_true[3]:aln_true[4]]
-                flag_len = aln_true[4] - aln_true[3]
-                if (a.endswith(fragment) and c.startswith(fragment)):
-                    new_seqs.pop(pair_pos)
-                    new_seqs.pop(0)
-                    new_seqs.append(SeqRecord(a + c[flag_len:]))
-                    break
-                elif (c.endswith(fragment) and a.startswith(fragment)):
-                    new_seqs.pop(pair_pos)
-                    new_seqs.pop(0)
-                    new_seqs.append(SeqRecord(c + a[flag_len:]))
-                    break
-            else:
-                temp = new_seqs[0]
-                new_seqs.pop(0)
-                new_seqs.append(temp)
-    SeqIO.write(new_seqs, fasta_output, 'fasta')
-
-
-naiveassembler('ATGTAGCTCC.fasta', 'output_ATGTAGCTCC.fasta', 2)
-naiveassembler('unknown.fasta', 'unknown_ass_naiv.txt', 20)
-# Пишет в файл следующее
-# ><unknown id> <unknown description>
-# ATGTAGCTCC
-
-
-
 # Task 2. de Bruijn graph-based assembler
 
 # Разделим риды на k-меры
@@ -75,11 +21,8 @@ def kmersep(reads_input, k=10):
             kmers.append(a[i:i + k])
     return kmers
 
-# kmers = kmersep('ATGTAGCTCC.fasta', 4)
-# unknown_kmers = kmersep('unknown.fasta', 4)
-
+# Конструируем граф
 def construct_de_bruijn_graph(kmers):
-    flag = 0 # если 0, то петель в графе нет, если 1, то в графе петля, дальше сборка невозможна
     # Construct de bruijn graph edges
     de_bruin_graph_edges = set()
     for kmer in kmers:
@@ -108,12 +51,9 @@ def construct_de_bruijn_graph(kmers):
                 if de_bruijn_graph.get(k1mer1) == None:
                     de_bruijn_graph[k1mer1] = k1mer2
                 else:
-                    flag = 1 #"В графе возникла петля, необходимо выбрать большее k"
-                    # de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
-    return de_bruijn_graph, edges_coverage, node_coverage, flag
+                    de_bruijn_graph[k1mer1] = [de_bruijn_graph[k1mer1], k1mer2]
+    return de_bruijn_graph, edges_coverage, node_coverage
 
-# de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(kmers)
-# de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(unknown_kmers)
 
 # Проверка числа компонент связности в графе
 def search(vertex, graph, visited):
@@ -185,59 +125,25 @@ def graph_way(de_bruijn_graph, node_coverage):
         final_seq += order_sorted[k][0][-1]
     return final_seq
 
-# graph_way(de_bruijn_graph, node_coverage)
-# Seq('ATGTAGCTCTCC', SingleLetterAlphabet()) Собирает как надо :)
 
 # Соберем сборщик из функций выше
-def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
-    # Считаем минимальную длину рида, k не должно ее превышать
-    seqs = list(SeqIO.parse(reads_input, 'fasta'))
-    read_lenght = []
-    for s in seqs:
-        read_lenght.append(len(s.seq))
-    min_read_len = min(read_lenght)
-
-    flag = 1
-    k = k - 2 # нужно, чтобы войти в петлю
-    while flag == 1:
-        k = k + 2 # будем прибвлять к k по 2 нуклеотида, пока не получим граф без петель
-        if k <= min_read_len:
-            kmers = kmersep(reads_input, k)  # разбиваем все риды на k-меры
-            de_bruijn_graph, edges_coverage, node_coverage, flag = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
-            if flag == 1:
-                continue
-            else:
-                break
-        else:
-            return "Нельзя собрать, удалите слишком короткие риды" # когда k уже длинее ридов, а в графе все равно петли
+def de_bruijn_assembler(reads_input, k=10, fasta_output='out_assem.txt'):
+    reads_input = reads_input
+    k = k
+    kmers = kmersep(reads_input, k)  # разбиваем все риды на k-vths
+    de_bruijn_graph, edges_coverage, node_coverage = construct_de_bruijn_graph(kmers)  # строим граф и считаем покрытие
     G = nx.Graph()
     my_graph = []
-    for i in de_bruijn_graph.items():
+    for i in de_bruijn_graph.items():  # берем граф, который выдеат функция construct_de_bruijn_graph(kmers)
         my_graph.append(i)
     G.add_edges_from(my_graph)
     components = dfs(G)
     if components != 1:
-        return "В графе больше 1 компоненты. Мы в такое не умеем еще!"
+        print("Мы в такое не умеем еще!")
     else:
         final_seq = graph_way(de_bruijn_graph, node_coverage)
-    if len(de_bruijn_graph.keys()) > 20:                                # Task 4. Graph visualization
-        nx.draw(G) # когда слишком много узлов, узлы не подписывать
-    else:
-        nx.draw(G, with_labels=True) # когда узлов мало, узлы подписывать
-    with open(output, 'w') as file:
+    with open(fasta_output, 'w') as file:
         file.write(f'{final_seq}')
-    return k, final_seq
+    return final_seq
 
-# de_bruijn_assembler('ATGTAGCTCC.fasta', 4)
-# de_bruijn_assembler('unknown.fasta', 6, 'unknown_ass.txt')
-# минимальное k для вируса k=14
-
-
-
-## Task 3. Сравнить результаты работы сборщиков
-
-de_bruijn_assembler('for_assembler_compar.fasta', 3)
-# 'Нельзя собрать, удалите слишком короткие риды'
-
-naiveassembler('for_assembler_compar.fasta', 'strange_out.fasta', 3)
-# собрал из 275 ридов 167 контигов :)
+de_bruijn_assembler('unknown.fasta', 'unknown_ass_4.txt', 4)
