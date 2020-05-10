@@ -1,0 +1,27 @@
+2020-05-10 20:54:54: INFO: Starting work with unknown.fasta...
+2020-05-10 20:54:55: DEBUG: Assembling process with k = 3
+2020-05-10 20:54:56: DEBUG: break the reads into k-mers
+2020-05-10 20:55:13: DEBUG: build the graph
+2020-05-10 20:55:13: DEBUG: too short k-mer, just increase k-mer by 2
+2020-05-10 20:55:13: DEBUG: Assembling process with k = 5
+2020-05-10 20:55:15: DEBUG: break the reads into k-mers
+2020-05-10 20:55:32: DEBUG: build the graph
+2020-05-10 20:55:32: DEBUG: too short k-mer, just increase k-mer by 2
+2020-05-10 20:55:32: DEBUG: Assembling process with k = 7
+2020-05-10 20:55:33: DEBUG: break the reads into k-mers
+2020-05-10 20:56:04: DEBUG: build the graph
+2020-05-10 20:56:04: DEBUG: too short k-mer, just increase k-mer by 2
+2020-05-10 20:56:04: DEBUG: Assembling process with k = 9
+2020-05-10 20:56:05: DEBUG: break the reads into k-mers
+2020-05-10 20:56:43: DEBUG: build the graph
+2020-05-10 20:56:43: DEBUG: too short k-mer, just increase k-mer by 2
+2020-05-10 20:56:43: DEBUG: Assembling process with k = 11
+2020-05-10 20:56:45: DEBUG: break the reads into k-mers
+2020-05-10 20:57:22: DEBUG: build the graph
+2020-05-10 20:57:22: DEBUG: too short k-mer, just increase k-mer by 2
+2020-05-10 20:57:22: DEBUG: Assembling process with k = 13
+2020-05-10 20:57:23: DEBUG: break the reads into k-mers
+2020-05-10 20:58:09: DEBUG: build the graph
+2020-05-10 20:58:09: DEBUG: check the number of components in graph
+2020-05-10 20:58:10: DEBUG: writhe the assembled string in file sborochka.txt
+2020-05-10 20:58:10: INFO: Job's done!
