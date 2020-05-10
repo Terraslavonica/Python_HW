@@ -191,7 +191,7 @@ def graph_way(de_bruijn_graph, node_coverage):
 # Соберем сборщик из функций выше
 def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
     # Считаем минимальную длину рида, k не должно ее превышать
-    seqs = list(SeqIO.parse('unknown.fasta', 'fasta'))
+    seqs = list(SeqIO.parse(reads_input, 'fasta'))
     read_lenght = []
     for s in seqs:
         read_lenght.append(len(s.seq))
@@ -209,7 +209,7 @@ def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
             else:
                 break
         else:
-            print("Нельзя собрать, удалите слишком короткие риды") # когда k уже длинее ридов, а в графе все равно петли
+            return "Нельзя собрать, удалите слишком короткие риды" # когда k уже длинее ридов, а в графе все равно петли
     G = nx.Graph()
     my_graph = []
     for i in de_bruijn_graph.items():
@@ -237,7 +237,7 @@ def de_bruijn_assembler(reads_input, k=10, output='out_assem.txt'):
 ## Task 3. Сравнить результаты работы сборщиков
 
 de_bruijn_assembler('for_assembler_compar.fasta', 3)
-# 'В графе больше 1 компоненты. Мы в такое не умеем еще!'
+# 'Нельзя собрать, удалите слишком короткие риды'
 
 naiveassembler('for_assembler_compar.fasta', 'strange_out.fasta', 3)
 # собрал из 275 ридов 167 контигов :)
