@@ -240,4 +240,23 @@ de_bruijn_assembler('for_assembler_compar.fasta', 3)
 # 'Нельзя собрать, удалите слишком короткие риды'
 
 naiveassembler('for_assembler_compar.fasta', 'strange_out.fasta', 3)
-# собрал из 275 ридов 167 контигов :)
+# собрал из 275 ридов 217 контигов :)
+
+"""
+All statistics are based on contigs of size >= 10 bp, unless otherwise noted (e.g., "# contigs (>= 0 bp)" and "Total length (>= 0 bp)" include all contigs).
+
+Assembly                   strange_out
+# contigs (>= 0 bp)        217
+# contigs (>= 1000 bp)     0
+Total length (>= 0 bp)     2574
+Total length (>= 1000 bp)  0
+# contigs                  217
+Largest contig             26
+Total length               2574
+GC (%)                     52.76
+N50                        11
+N75                        10
+L50                        93
+L75                        153
+# N's per 100 kbp          0.00
+"""
