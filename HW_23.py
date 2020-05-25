@@ -247,7 +247,7 @@ data
 
 #3x3
 kernel_ring = np.array([ [0, -1, 0],
-                    [-1, 10, -1],
+                    [-1, 2, -1],
                     [0, -1, 0]])
 modified = convolve(data, kernel_ring)
 plt.imshow(modified, cmap='gray')
