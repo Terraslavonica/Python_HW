@@ -20,7 +20,7 @@ args = args.__dict__
 ## Сделайте небольшой аналог триммоматика, который может отрезать нуклеотиды в начале последовательностей, в конце,
 # удалять фрагменты с концов со средним качеством ниже указанного (25 баллов)
 
-def my_trimmer(fastq_file, limqual=30, begin=0, finish=0, trim_fastq_file='trim_out.fastq'):
+def my_trimmer(fastq_file, begin=0, finish=0, limqual=30, trim_fastq_file='trim_out.fastq'):
     trim_rec = []  # list for trimmed records
     fastq = SeqIO.parse(fastq_file, "fastq")
     for record in fastq:
