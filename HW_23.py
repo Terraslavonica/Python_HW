@@ -179,11 +179,11 @@ def convolve_five(img, kernel):
 
 
 # 5
-kernel = np.array([ [1, 0, 0, 0, -1],
-                    [-1, 0, 0, 0, 1],
-                    [-1, 0, 0, 0, 1],
-                    [-1, 0, 0, 0, 1],
-                    [1, 0, 0, 0, -1]])
+kernel = np.array([[1, 0, 0, 0, -1],
+                   [-1, 0, 0, 0, 1],
+                   [-1, 0, 0, 0, 1],
+                   [-1, 0, 0, 0, 1],
+                   [1, 0, 0, 0, -1]])
 kernel = kernel.reshape((5, 5, 1))
 modified = convolve_five(data, kernel)
 plt.imshow(modified)#, cmap='gray')
