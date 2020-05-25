@@ -5,23 +5,49 @@ import argparse
 
 
 # Task 3. Сделать приложение по применению фильтров (то есть с интерфейсом) (15 баллов)
+# kernels
+line3_1 = np.array([ [0, 1, 0],
+                    [0, 1, 0],
+                    [0, 1, 0]])
+line3_2 = np.array([ [1, 0, 0],
+                    [0, 1, 0],
+                    [0, 0, 1]])
+line5_1 = np.array([[1, 0, 0, 0, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 0, 0, 0, 1],
+                    [1, 0, 0, 0, 1]])
+line5_2 = np.array([[1, 0, 0, 0, 0],
+                    [0, 1, 0, 0, 0],
+                    [0, 0, 1, 0, 0],
+                    [0, 0, 0, 1, 0],
+                    [0, 0, 0, 0, 1]])
+ring3 = np.array([ [0, -1, 0],
+                    [-1, 2, -1],
+                    [0, -1, 0]])
+ring5 = np.array([[0, 0, -1, 0, 0],
+                 [0, -1, -1, -1, 0],
+                 [-1, -1, 11, -1, -1],
+                 [0, -1, -1, -1, 0],
+                 [0, 0, -1, 0, 0]])
 
 # Argparse part
 parser = argparse.ArgumentParser(prog='filter_app', description='app help to improve your photo')
 parser.add_argument('img', type=str, metavar='path_to_photo', help='file with your photo')
-parser.add_argument('kernel', type=np.array, metavar='matrix', help='matrix that is a filter')
+parser.add_argument('-k', '--kernel', type=str, default=line3_1, metavar='matrix', help='matrix that is a filter')
 
 args = parser.parse_args()
 args = args.__dict__
 # print(args)
 
-def convolve(img, kernel):
+def convolve(img, kernel=line3_1):
     """
     Make convolution of img with kernel, assuming stride is equal to 1
     :param img: path to file with photo
     :param kernel: 2d n x n np.array
     :return: filtered photo
     """
+    kernel = np.array(kernel)
     img = Image.open(img)
     data = np.array(img)[:, :, 0:3]
     n = kernel.shape[0]
