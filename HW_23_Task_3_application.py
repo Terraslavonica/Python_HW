@@ -39,7 +39,7 @@ parser.add_argument('-k', '--kernel', default = 'line3_1', type=str, metavar='ma
 
 args = parser.parse_args()
 args = args.__dict__
-print(args)
+# print(args)
 
 def convolve(img, kernel):
     """
