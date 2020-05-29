@@ -34,11 +34,11 @@ ring5 = np.array([[0, 0, -1, 0, 0],
 # Argparse part
 parser = argparse.ArgumentParser(prog='filter_app', description='app help to improve your photo')
 parser.add_argument('img', type=str, metavar='path_to_photo', help='file with your photo')
-parser.add_argument('-k', '--kernel', type=str, default=line3_1, metavar='matrix', help='matrix that is a filter')
+parser.add_argument('-k', '--kernel', default = f'{line3_1}', type=str, metavar='matrix', help='matrix that is a filter')
 
 args = parser.parse_args()
 args = args.__dict__
-# print(args)
+print(args)
 
 def convolve(img, kernel=line3_1):
     """
