@@ -30,24 +30,25 @@ ring5 = np.array([[0, 0, -1, 0, 0],
                  [-1, -1, 11, -1, -1],
                  [0, -1, -1, -1, 0],
                  [0, 0, -1, 0, 0]])
+filters = {'line3_1' : line3_1, 'line3_2' : line3_2, 'line5_1' : line5_1, 'line5_2' : line5_2, 'ring3' : ring3, 'ring5' : ring5}
 
 # Argparse part
 parser = argparse.ArgumentParser(prog='filter_app', description='app help to improve your photo')
 parser.add_argument('img', type=str, metavar='path_to_photo', help='file with your photo')
-parser.add_argument('-k', '--kernel', default = f'{line3_1}', type=str, metavar='matrix', help='matrix that is a filter')
+parser.add_argument('-k', '--kernel', default = 'line3_1', type=str, metavar='matrix', help='matrix that is a filter')
 
 args = parser.parse_args()
 args = args.__dict__
 print(args)
 
-def convolve(img, kernel=line3_1):
+def convolve(img, kernel):
     """
     Make convolution of img with kernel, assuming stride is equal to 1
     :param img: path to file with photo
     :param kernel: 2d n x n np.array
     :return: filtered photo
     """
-    kernel = np.array(kernel)
+    kernel = filters[kernel]
     img = Image.open(img)
     data = np.array(img)[:, :, 0:3]
     n = kernel.shape[0]
@@ -63,5 +64,5 @@ def convolve(img, kernel=line3_1):
 modified = convolve(args['img'], args['kernel'])
 plt.imshow(modified, cmap='gray')
 plt.axis('off')
-plt.show()
-plt.savefig(f'new_{img}.png')
+plt.savefig(f'new_{args["img"]}.png')
+print(f'новое фото сохранено в файл new_{args["img"]}.png')
