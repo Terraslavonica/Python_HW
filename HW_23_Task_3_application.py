@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from PIL import Image
 import numpy as np
 import argparse
+import os
 
 
 # Task 3. Сделать приложение по применению фильтров (то есть с интерфейсом) (15 баллов)
@@ -34,20 +35,29 @@ filters = {'line3_1' : line3_1, 'line3_2' : line3_2, 'line5_1' : line5_1, 'line5
 
 # Argparse part
 parser = argparse.ArgumentParser(prog='filter_app', description='app help to improve your photo')
-parser.add_argument('img', type=str, metavar='path_to_photo', help='file with your photo')
-parser.add_argument('-k', '--kernel', default = 'line3_1', type=str, metavar='matrix', help='matrix that is a filter')
+parser.add_argument('img', type=str, metavar='photo_file_name', help='name of the file with your photo')
+parser.add_argument('-p', '--path', default = '', type=str, metavar='path_to_photo', help='path to the directory with your photo')
+parser.add_argument('-k', '--kernel', default = 'line3_1', type=str, metavar='matrix',
+                    help='matrix that is a filter: '
+                         'line3_1 (default) - 3x3, search the vertical lines, '
+                         'line3_2 - 3x3, search the lines like \, '
+                         'line5_1 - 5x5, search the vertical lines, '
+                         'line5_2 - 5x5, search the lines like \, '
+                         'ring3 - 3x3, search the circles, '
+                         'ring5 - 5x5, search the circles')
 
 args = parser.parse_args()
 args = args.__dict__
 # print(args)
 
-def convolve(img, kernel):
+def convolve(img, path, kernel):
     """
     Make convolution of img with kernel, assuming stride is equal to 1
     :param img: path to file with photo
     :param kernel: 2d n x n np.array
     :return: filtered photo
     """
+    img = os.path.join(path, img)
     kernel = filters[kernel]
     img = Image.open(img)
     data = np.array(img)[:, :, 0:3]
@@ -61,8 +71,10 @@ def convolve(img, kernel):
             modified[row, col] = (data[row:row + n, col:col + n] * kernel).sum()
     return modified
 
-modified = convolve(args['img'], args['kernel'])
+modified = convolve(args['img'], args['path'], args['kernel'])
 plt.imshow(modified, cmap='gray')
 plt.axis('off')
-plt.savefig(f'new_{args["img"]}.png')
-print(f'новое фото сохранено в файл new_{args["img"]}.png')
+new_name = 'new_' + args["img"]
+new_img = os.path.join(args['path'], new_name)
+plt.savefig(new_img)
+print(f'новое фото сохранено в файл {new_img}')
